@@ -5,15 +5,15 @@ import styles from "./Projects.module.css";
 
 type Props = {
   project: Project;
-  /** Shown beside the location when distance data is reliable. */
-  distanceLabel?: string;
+  /** Same-size card (4:5) for carousels. */
+  uniform?: boolean;
   priority?: boolean;
   sizes?: string;
 };
 
-export default function ProjectCard({ project: p, distanceLabel, priority, sizes = "(min-width: 900px) 50vw, 100vw" }: Props) {
+export default function ProjectCard({ project: p, uniform, priority, sizes = "(min-width: 900px) 50vw, 100vw" }: Props) {
   return (
-    <article className={`${styles.card} ${styles[p.shape]}`}>
+    <article className={`${styles.card} ${uniform ? styles.uniform : styles[p.shape]}`}>
       <Link href={`/projects/${p.slug}`} className={styles.cardLink}>
         <div className={styles.media}>
           <Photo
@@ -35,7 +35,6 @@ export default function ProjectCard({ project: p, distanceLabel, priority, sizes
           <p className={styles.where}>
             {p.location.city}
             {p.location.area ? `, ${p.location.area}` : ""}
-            {distanceLabel ? <strong> · {distanceLabel}</strong> : null}
           </p>
           <p className={styles.status}>
             {p.status}

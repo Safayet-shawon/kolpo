@@ -22,8 +22,8 @@ const empty: ContactInput = {
   consent: false,
 };
 
-export default function ContactForm({ fallbackEmail, defaultService = "" }: { fallbackEmail: string | null; defaultService?: string }) {
-  const [values, setValues] = useState<ContactInput>({ ...empty, service: defaultService });
+export default function ContactForm({ fallbackEmail, defaultService = "", defaultMessage = "" }: { fallbackEmail: string | null; defaultService?: string; defaultMessage?: string }) {
+  const [values, setValues] = useState<ContactInput>({ ...empty, service: defaultService, message: defaultMessage });
   const [errors, setErrors] = useState<ContactErrors>({});
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const [honeypot, setHoneypot] = useState("");

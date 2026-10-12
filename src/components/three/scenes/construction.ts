@@ -49,7 +49,7 @@ const WALLS = {
 
 /** story = the home-page film: design → construction → one flat opened up and furnished (slower pacing). */
 const make = (story: boolean): Builder => (ctx) => {
-  const k = story ? 0.82 : 0.64;
+  const k = 0.4;
   const T = (t: number) => t * k;
   const tl = gsap.timeline({ paused: true });
   const { scene } = ctx;
@@ -94,11 +94,11 @@ const make = (story: boolean): Builder => (ctx) => {
   site.position.y = 0.005;
   site.receiveShadow = true;
   scene.add(site);
-  const soil = new THREE.Color(0xe4e2db);
+  const soil = new THREE.Color(0xffe4cc);
   tl.to(siteMat.color, { r: soil.r, g: soil.g, b: soil.b, duration: T(1.4) }, T(0.5));
 
   // cover over the (future) pit so the plot reads as flat, undisturbed ground
-  const coverMat = std(0xe4e2db, { transparent: true });
+  const coverMat = std(0xffe4cc, { transparent: true });
   const cover = new THREE.Mesh(new THREE.PlaneGeometry(PX * 2, PZ * 2), coverMat);
   cover.rotation.x = -Math.PI / 2;
   cover.position.y = 0.006;
@@ -163,7 +163,7 @@ const make = (story: boolean): Builder => (ctx) => {
   tl.to(ghostEdges.material as THREE.Material, { opacity: 0.18, duration: T(1.2) }, T(11.2));
 
   // ── excavation ──
-  const wallSoil = std(0xbfae90);
+  const wallSoil = std(0xe0b894);
   const pitWalls = new THREE.Group();
   const pw = (w: number, d: number, x: number, z: number) => {
     const g = new THREE.BoxGeometry(w, PIT, d);
@@ -178,7 +178,7 @@ const make = (story: boolean): Builder => (ctx) => {
   pitWalls.visible = false;
   pitWalls.scale.y = 0.001;
   scene.add(pitWalls);
-  const pitFloor = mesh(new THREE.PlaneGeometry(2 * PX, 2 * PZ), std(0xaa9a7e), [0, -PIT, 0], false);
+  const pitFloor = mesh(new THREE.PlaneGeometry(2 * PX, 2 * PZ), std(0xd9a77e), [0, -PIT, 0], false);
   pitFloor.rotation.x = -Math.PI / 2;
   pitFloor.visible = false;
   scene.add(pitFloor);
@@ -204,7 +204,7 @@ const make = (story: boolean): Builder => (ctx) => {
   }
 
   // ── foundations ──
-  const concrete = std(0xcfcbc2);
+  const concrete = std(0xdedad2);
   const footings: THREE.Mesh[] = [];
   let fi = 0;
   for (const x of COLS_X)
@@ -249,7 +249,7 @@ const make = (story: boolean): Builder => (ctx) => {
   tl.to(jib.rotation, { y: 2.4, duration: T(16), ease: "sine.inOut" }, T(15));
 
   // ── frame: per storey columns → beams → slab ──
-  const frameMat = std(0xd6d1c7);
+  const frameMat = std(0xe9e4dc);
   const storeyGroups: THREE.Mesh[][] = [];
   for (let s = 0; s < STOREYS; s++) {
     const base = GROUND + s * SH;
@@ -401,7 +401,7 @@ const make = (story: boolean): Builder => (ctx) => {
   );
 
   // ── windows, doors & facade ──
-  const glassMat = new THREE.MeshStandardMaterial({ color: 0xcfdcdf, transparent: true, opacity: 0.35, roughness: 0.05, metalness: 0.1 });
+  const glassMat = new THREE.MeshStandardMaterial({ color: 0xb9e6ea, transparent: true, opacity: 0.35, roughness: 0.05, metalness: 0.1 });
   const dark = std(C.charcoal, { roughness: 0.6 });
   const oak = std(C.oak, { roughness: 0.6 });
   const wallPos = (o: Opening): { p: THREE.Vector3; rot: number } => {
@@ -491,9 +491,9 @@ const make = (story: boolean): Builder => (ctx) => {
   lawn.position.y = 0.012;
   lawn.receiveShadow = true;
   scene.add(lawn);
-  const green = new THREE.Color(0xbfc9ad);
+  const green = new THREE.Color(0xc9ecc8);
   tl.to(lawnMat.color, { r: green.r, g: green.g, b: green.b, duration: T(1.6) }, T(33.2));
-  const pathMat = std(0xeae3d4);
+  const pathMat = std(0xfff0dc);
   const path = mesh(baseBox(1.7, 0.04, 9.6), pathMat, [0, 0.01, BZ + 5.3], false);
   scene.add(path);
   rise(tl, path, T(34.0), T(1.2));
@@ -554,7 +554,7 @@ const make = (story: boolean): Builder => (ctx) => {
     });
 
     // party wall, back partition, wall finish
-    const wallMat = std(0xf6f6f2);
+    const wallMat = std(0xfffaf2);
     const party = mesh(baseBox(0.2, SH - 0.3, 2 * (BZ - 0.3)), wallMat, [0.2, FY, 0]);
     outline(party, C.charcoal, 0.3);
     scene.add(party);
@@ -563,7 +563,7 @@ const make = (story: boolean): Builder => (ctx) => {
     outline(back, C.charcoal, 0.3);
     scene.add(back);
     rise(tl, back, T(41.2), T(1.0));
-    const finish = new THREE.Color(0xe9e7e0);
+    const finish = new THREE.Color(0xffe8d3);
     tl.to(wallMat.color, { r: finish.r, g: finish.g, b: finish.b, duration: T(1.6) }, T(43));
 
     // oak floor wipes in from the left

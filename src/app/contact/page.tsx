@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-export default async function ContactPage({ searchParams }: { searchParams: Promise<{ service?: string }> }) {
-  const { service } = await searchParams;
+export default async function ContactPage({ searchParams }: { searchParams: Promise<{ service?: string; note?: string }> }) {
+  const { service, note } = await searchParams;
   const valid = ["architecture", "interior-design", "construction", "multiple", "not-sure"];
   return (
     <>
@@ -24,7 +24,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
         <div className="wrap">
           <div className={`grid-12 ${styles.layout}`}>
             <div className={styles.form}>
-              <ContactForm fallbackEmail={site.contactEmail} defaultService={service && valid.includes(service) ? service : ""} />
+              <ContactForm fallbackEmail={site.contactEmail} defaultService={service && valid.includes(service) ? service : ""} defaultMessage={note ? note.slice(0, 400) : ""} />
             </div>
             <aside className={styles.aside} aria-label="Other ways to reach us">
               <h2 className="h3">Other ways to reach us</h2>

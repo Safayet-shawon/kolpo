@@ -3,20 +3,20 @@ import gsap from "gsap";
 
 /** Restrained architectural-model palette: ivory, limestone, charcoal, sage, brass. */
 export const C = {
-  bg: 0xfafaf8,
-  ivory: 0xf4f4f0,
+  bg: 0xfff8ef,
+  ivory: 0xfff1e2,
   white: 0xffffff,
-  limestone: 0xe0ded7,
-  stone: 0xd2d0c8,
-  concrete: 0xc0bfba,
-  charcoal: 0x2a2927,
-  sage: 0x9db3a3,
-  sageDark: 0x6f8c7c,
-  brass: 0xb08d57,
-  water: 0xb4c6c8,
-  soil: 0xb4aa98,
-  brick: 0xd8cbb6,
-  oak: 0xc9a77a,
+  limestone: 0xf0dcc6,
+  stone: 0xe6d2bc,
+  concrete: 0xe9e2da,
+  charcoal: 0x1c2142,
+  sage: 0x6cc08a,
+  sageDark: 0x2f9e75,
+  brass: 0xf2a900,
+  water: 0x7fd0d4,
+  soil: 0xf3dcc3,
+  brick: 0xe2806a,
+  oak: 0xe3b48a,
 };
 
 export type V3 = [number, number, number];
@@ -180,16 +180,20 @@ export class Trees {
   private m = new THREE.Matrix4();
   private q = new THREE.Quaternion();
 
-  constructor(list: { x: number; z: number; s: number }[], color = C.sage) {
+  constructor(list: { x: number; z: number; s: number }[]) {
     const n = list.length;
     const trunk = new THREE.CylinderGeometry(0.12, 0.18, 1, 6);
     trunk.translate(0, 0.5, 0);
     const crown = new THREE.IcosahedronGeometry(1, 1);
     this.trunks = new THREE.InstancedMesh(trunk, std(0x8b7960), n);
-    this.crowns = new THREE.InstancedMesh(crown, std(color, { flatShading: true }), n);
+    this.crowns = new THREE.InstancedMesh(crown, std(0xffffff, { flatShading: true }), n);
     this.trunks.castShadow = this.crowns.castShadow = true;
     this.trunks.receiveShadow = this.crowns.receiveShadow = true;
-    list.forEach((t, i) => this.items.push({ ...t, delay: rnd(i + 3) * 0.55 }));
+    const greens = [0x62c17f, 0x3fae78, 0x8fd694, 0x2f9e75, 0xf2b84b];
+    list.forEach((t, i) => {
+      this.items.push({ ...t, delay: rnd(i + 3) * 0.55 });
+      this.crowns.setColorAt(i, new THREE.Color(greens[Math.floor(rnd(i + 11) * (rnd(i + 5) > 0.93 ? 5 : 4))]));
+    });
     this.apply();
   }
 

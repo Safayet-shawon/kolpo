@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Suspense } from "react";
 import { HeroHome } from "@/components/three/Heroes";
 import { Licenses, ServiceRow } from "@/components/HomeSections";
-import { SectionHead } from "@/components/Sections";
-import ProjectsExplorer from "@/components/projects/ProjectsExplorer";
+import { RealProjects, SectionHead } from "@/components/Sections";
+import ProjectsCarousel from "@/components/projects/ProjectsCarousel";
+import { projects } from "@/data/projects";
 
 export const metadata: Metadata = {
   title: { absolute: "KOLPO — Architecture, Interior Design & Construction" },
@@ -21,14 +20,11 @@ export default function HomePage() {
       <section className="section" id="work" aria-labelledby="work-title">
         <div className="wrap">
           <SectionHead title={<span id="work-title">Our works</span>} />
-          <Suspense fallback={<p className="muted">Loading…</p>}>
-            <ProjectsExplorer limit={6} />
-          </Suspense>
-          <p style={{ marginTop: "2rem" }}>
-            <Link href="/projects" className="arrow-link">
-              All projects <span className="arr" aria-hidden="true">→</span>
-            </Link>
-          </p>
+          <ProjectsCarousel list={projects} label="All projects" />
+          <h3 className="h3" style={{ margin: "2.4rem 0 1rem" }}>
+            Completed projects
+          </h3>
+          <RealProjects />
         </div>
       </section>
 

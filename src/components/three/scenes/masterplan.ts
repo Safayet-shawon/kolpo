@@ -28,6 +28,9 @@ const BLOCKS: Block[] = [
   { x0: 28.5, x1: 56, z0: 4.5, z1: 36, cols: 3, rows: 2 },
 ];
 
+const BODY = [0xffffff, 0xffe1d2, 0xd9f1ea, 0xfff0b8, 0xe6e1ff, 0xffd9e4];
+const ROOF = [0xe2806a, 0x4fb3aa, 0xf2c14e, 0x8f7cf0, 0xe9a3b4, 0x2f9e75];
+
 const AVENUE_HALF = 3;
 const CROSS = [
   [-27, -21],
@@ -67,8 +70,8 @@ function planHouses(): { plots: House["plot"][]; list: House[] } {
 
         const group = new THREE.Group();
         group.position.set(cx, 0, cz);
-        const bodyMat = std(0xfdfcf8);
-        const roofMat = std(C.limestone);
+        const bodyMat = std(BODY[i % BODY.length]);
+        const roofMat = std(ROOF[(i * 3 + 1) % ROOF.length]);
         const levels: THREE.Mesh[] = [];
         let lw = w;
         let ld = d;
@@ -143,7 +146,7 @@ function treeList() {
 
 export function buildMasterplan(): Builder {
   return (ctx) => {
-    const k = 1;
+    const k = 0.55;
     const T = (t: number) => t * k;
     const tl = gsap.timeline({ paused: true });
     const { scene } = ctx;
@@ -200,7 +203,7 @@ export function buildMasterplan(): Builder {
     scene.add(road.build(C.charcoal, 0.8));
     road.draw(tl, T(5.0), T(2.2));
     const roadMat = std(C.bg);
-    const roadTarget = new THREE.Color(0xe3ddd0);
+    const roadTarget = new THREE.Color(0xf3dec8);
     const roadShapes: [number, number, number, number][] = [
       [-60, -AVENUE_HALF, 60, AVENUE_HALF],
       [-27, -38, -21, 38],
@@ -231,7 +234,7 @@ export function buildMasterplan(): Builder {
     scene.add(fpLines.build(C.charcoal, 0.95));
     fpLines.draw(tl, T(9.5), T(1.5));
     const fpMat = std(C.bg);
-    const fpTarget = new THREE.Color(0xd9d2c3);
+    const fpTarget = new THREE.Color(0xffd5bd);
     houses.forEach((h) => {
       const p = new THREE.Mesh(new THREE.PlaneGeometry(h.fp.x1 - h.fp.x0, h.fp.z1 - h.fp.z0), fpMat);
       p.rotation.x = -Math.PI / 2;
@@ -271,7 +274,7 @@ export function buildMasterplan(): Builder {
     lawn.position.set(0, 0.02, 19.5);
     lawn.receiveShadow = true;
     scene.add(lawn);
-    const lawnTarget = new THREE.Color(0xc2cbb2);
+    const lawnTarget = new THREE.Color(0xcdeccf);
     tl.to(lawnMat.color, { r: lawnTarget.r, g: lawnTarget.g, b: lawnTarget.b, duration: T(1.6) }, T(16.3));
     const pondMat = std(C.water, { roughness: 0.35 });
     const pond = new THREE.Mesh(new THREE.CircleGeometry(1, 40), pondMat);
@@ -284,7 +287,7 @@ export function buildMasterplan(): Builder {
     pond.scale.set(0.001, 0.001, 1);
     tl.to(pond.scale, { x: 9, y: 5.5, duration: T(1.4), ease: "power2.out" }, T(17.0));
     const pavilion = new THREE.Group();
-    const pv = mesh(baseBox(9, 3.2, 5), std(C.white), [0, 0, 0]);
+    const pv = mesh(baseBox(9, 3.2, 5), std(0xffffff), [0, 0, 0]);
     outline(pv);
     const pr = mesh(baseBox(10, 0.3, 6), std(C.limestone), [0, 3.2, 0]);
     pavilion.add(pv, pr);
@@ -316,13 +319,13 @@ export function buildMasterplan(): Builder {
     const end = T(25);
     const stages: Stage[] = [
       { at: 0, label: "Empty site" },
-      { at: 2.4, label: "Site boundary & survey grid" },
-      { at: 5.0, label: "Roads & circulation" },
-      { at: 7.6, label: "Residential plot layout" },
-      { at: 9.4, label: "Building footprints" },
-      { at: 11.4, label: "Three-dimensional massing" },
-      { at: 16.2, label: "Landscape & community" },
-      { at: 19.6, label: "The finished masterplan" },
+      { at: T(2.4), label: "Site boundary & survey grid" },
+      { at: T(5.0), label: "Roads & circulation" },
+      { at: T(7.6), label: "Residential plot layout" },
+      { at: T(9.4), label: "Building footprints" },
+      { at: T(11.4), label: "Three-dimensional massing" },
+      { at: T(16.2), label: "Landscape & community" },
+      { at: T(19.6), label: "The finished masterplan" },
     ];
 
     // pad the timeline so the final composition holds

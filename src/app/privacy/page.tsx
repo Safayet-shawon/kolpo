@@ -23,13 +23,6 @@ export default function PrivacyPage() {
             and to discuss your project.
           </p>
 
-          <h2 className="h3">Your location</h2>
-          <p>
-            The “Use my location” button asks your browser for permission. It is only used when you press it. Your position is processed
-            in your browser to sort projects by distance and is not sent to our servers or stored. You can decline, and typing a city
-            works instead.
-          </p>
-
           <h2 className="h3">Cookies and storage</h2>
           <p>
             We don’t use advertising or analytics cookies. The site stores two small flags in your browser’s session storage so that the intro

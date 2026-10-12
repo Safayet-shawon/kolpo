@@ -18,7 +18,7 @@ const WALL = 0.16;
 const rbox = (w: number, h: number, d: number, r = 0.05) => new RoundedBoxGeometry(w, h, d, 3, r);
 
 export const buildInterior: Builder = (ctx) => {
-  const k = 0.8;
+  const k = 0.5;
   const T = (t: number) => t * k;
   const tl = gsap.timeline({ paused: true });
   const { scene } = ctx;
@@ -93,7 +93,7 @@ export const buildInterior: Builder = (ctx) => {
   tl.to(wood.scale, { x: 1, duration: T(2.2), ease: "power2.inOut" }, T(4.0));
 
   // ── shell: four parts that start exploded and close in ──
-  const wallMat = std(0xf6f4ee);
+  const wallMat = std(0xfffaf2);
   const wallShadow = (m: THREE.Mesh) => {
     m.castShadow = true;
     m.receiveShadow = true;
@@ -181,12 +181,12 @@ export const buildInterior: Builder = (ctx) => {
   tl.to(ceilG.position, { y: 0, duration: T(2.0), ease: "power3.inOut" }, T(8.4));
 
   // wall finish: ivory → warm limewash
-  const limewash = new THREE.Color(0xe7ddcb);
+  const limewash = new THREE.Color(0xffe6d0);
   tl.to(wallMat.color, { r: limewash.r, g: limewash.g, b: limewash.b, duration: T(2.0) }, T(5.2));
 
   // slat feature wall behind the sofa
   const slatMat = std(0xb99a70);
-  const slatBack = mesh(new THREE.BoxGeometry(3.1, 2.5, 0.04), std(0x6f7d63), [0, 1.25, -HD + 0.03], false);
+  const slatBack = mesh(new THREE.BoxGeometry(3.1, 2.5, 0.04), std(0x1f7f78), [0, 1.25, -HD + 0.03], false);
   slatBack.visible = false;
   scene.add(slatBack);
   tl.set(slatBack, { visible: true }, T(6.0));
@@ -288,8 +288,8 @@ export const buildInterior: Builder = (ctx) => {
   tl.to(books.scale, { y: 1, duration: T(1.0), ease: "power2.out" }, T(13.2));
 
   // ── furniture ──
-  const linen = std(0xd9cdb5, { roughness: 1 });
-  const boucle = std(0xe9e2d3, { roughness: 1 });
+  const linen = std(0x2fa89d, { roughness: 1 });
+  const boucle = std(0xf29a80, { roughness: 1 });
   const travertine = std(0xe0d3b9, { roughness: 0.8 });
   const darkWood = std(0x6b5640, { roughness: 0.6 });
   const groups: THREE.Group[] = [];
@@ -316,7 +316,7 @@ export const buildInterior: Builder = (ctx) => {
 
   // rug
   const rug = new THREE.Group();
-  part(rug, new THREE.BoxGeometry(3.3, 0.02, 2.3), std(0xe3d8c2, { roughness: 1 }), [0, 0.01, 0]);
+  part(rug, new THREE.BoxGeometry(3.3, 0.02, 2.3), std(0xf6d58a, { roughness: 1 }), [0, 0.01, 0]);
   const rugLines = new Lines().rect(-1.5, -1.0, 1.5, 1.0, 0.025);
   const rugEdge = rugLines.build(0xb7a98c, 0.9);
   rug.add(rugEdge);

@@ -43,7 +43,7 @@
   max-width: 34ch;
 }
 .processDark .step p {
-  color: rgba(250, 250, 248, 0.72);
+  color: rgba(255, 248, 239, 0.72);
 }
 @media (min-width: 640px) {
   .process {

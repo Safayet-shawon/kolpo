@@ -63,7 +63,7 @@ export function HeroArchitecture() {
             We Shape the Spaces Where <em>Life Unfolds.</em>
           </>
         }
-        primary={{ href: "/projects?category=architecture", label: "Explore Architecture Projects" }}
+        primary={{ href: "/#work", label: "Explore Architecture Projects" }}
         secondary={{ href: "/contact", label: "Start a project" }}
       />
     </ThreeStage>
@@ -84,7 +84,7 @@ export function HeroInterior() {
             Transforming Empty Rooms into <em>Meaningful Experiences.</em>
           </>
         }
-        primary={{ href: "/projects?category=interior", label: "Explore Interior Projects" }}
+        primary={{ href: "/#work", label: "Explore Interior Projects" }}
         secondary={{ href: "/contact", label: "Start a project" }}
       />
     </ThreeStage>
@@ -105,7 +105,7 @@ export function HeroConstruction() {
             From Vision to <em>Built Reality.</em>
           </>
         }
-        primary={{ href: "/projects?category=construction", label: "Explore Construction Projects" }}
+        primary={{ href: "/#work", label: "Explore Construction Projects" }}
         secondary={{ href: "/contact", label: "Start a project" }}
       />
     </ThreeStage>

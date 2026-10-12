@@ -10,14 +10,19 @@ A cinematic, photography-led marketing site for KOLPO. Next.js 16 (App Router) �
 > - **Heroes are procedural 3D** (Three.js + GSAP), not photographs and not video. They are architectural-model abstractions, not approved plans, and say so on screen.
 
 ## Routes
-`/` · `/architecture` · `/interior-design` · `/construction` · `/projects` · `/projects/[slug]` (8 pre-rendered) · `/about` · `/contact` · `/privacy` · `/journal` · `/journal/[slug]` · `/api/contact` · `/sitemap.xml` · `/robots.txt`
+`/` · `/architecture` · `/interior-design` · `/construction` · `/all-in-one` · `/projects/[slug]` (8 pre-rendered; `/projects` redirects to the home page carousel) · `/about` · `/contact` · `/privacy` · `/journal` · `/journal/[slug]` · `/api/contact` · `/sitemap.xml` · `/robots.txt`
+
+## Cost estimator (placeholder rates!)
+Each service page (and `/all-in-one`) has a "What do you want ...?" picker with three options (Architecture: Home / Building / Colony; Interior: Home / Office / Restaurant; Construction: Home / Building / Colony; All in one: Home / Building / Colony). Choosing one opens a popup that asks for the area in sq ft and returns an indicative total with a per-part breakdown, plus a "Request a quote" link that prefills the contact form.
+
+**The rates in `src/data/pricing.ts` are illustrative placeholders (BDT per sq ft), not KOLPO's prices.** Replace every `perSqft` (and the min/max areas) with the studio's real figures and set `PRICING_VERIFIED = true`. Results are always labelled "indicative estimate, not a quotation".
 
 ## Hero experiences (procedural 3D)
 All four play automatically on entry, are **time-based (never scroll-driven)**, and come with Pause / Skip / Replay. Code: `src/components/three/` (`runtime.ts` renderer, camera and GSAP timeline control; `ThreeStage.tsx` React wrapper and HUD; `scenes/*.ts` the scene builders; `common.ts` shared helpers). Three.js and GSAP are dynamically imported, so they never block first paint.
 
 | Hero | Stages (HUD labels) |
 |---|---|
-| Home | One slow film (about 46 s): a building is designed on an empty site (survey, two-flat floor plan, wireframe proposal), the same building is constructed (excavation, foundations, frame, brickwork, windows, finishing, landscaping), then a first-floor flat is opened up and furnished with its lights switched on |
+| Home | One film (about 22 s): a building is designed on an empty site (survey, two-flat floor plan, wireframe proposal), the same building is constructed (excavation, foundations, frame, brickwork, windows, finishing, landscaping), then a first-floor flat is opened up and furnished with its lights switched on |
 | Architecture | Empty site, boundary and survey grid, roads and circulation, residential plot layout, building footprints, 3D massing (wireframe rises then solidifies), landscape and community, finished masterplan |
 | Interior | Exploded empty shell closes up, floor and wall finishes, ceiling design and lighting, built-in joinery, furniture assembles, lighting comes on, materials and details, finished interior |
 | Construction | Surveyed empty site, footprint and wireframe proposal, excavation, foundations, columns/beams/slabs per storey, instanced brickwork (about 5k bricks), windows and doors, finishing (scaffolding and crane removed), landscaping and front three-quarter reveal |

@@ -42,15 +42,15 @@ export interface FlatFurniture {
 }
 
 export function makeFlatFurniture(): FlatFurniture {
-  const linen = std(0xd9cdb5, { roughness: 1 });
-  const boucle = std(0xe9e2d3, { roughness: 1 });
+  const linen = std(0x2fa89d, { roughness: 1 });
+  const boucle = std(0xf29a80, { roughness: 1 });
   const travertine = std(0xe0d3b9, { roughness: 0.8 });
   const darkWood = std(0x6b5640, { roughness: 0.6 });
   const brass = std(C.brass, { metalness: 0.65, roughness: 0.35 });
   const warm = new THREE.Color(0xffd9a0);
 
   const rug = new THREE.Group();
-  part(rug, new THREE.BoxGeometry(3.3, 0.02, 2.3), std(0xe3d8c2, { roughness: 1 }), [0, 0.01, 0]);
+  part(rug, new THREE.BoxGeometry(3.3, 0.02, 2.3), std(0xf6d58a, { roughness: 1 }), [0, 0.01, 0]);
 
   const sofa = new THREE.Group();
   part(sofa, rbox(2.4, 0.4, 0.95), linen, [0, 0.32, 0]);

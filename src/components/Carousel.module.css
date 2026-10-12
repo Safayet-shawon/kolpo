@@ -1,0 +1,54 @@
+.wrap {
+  display: grid;
+  gap: 0.8rem;
+}
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+.controls button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--charcoal);
+  background: transparent;
+  color: var(--charcoal);
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    opacity 0.2s;
+}
+.controls button:hover:not(:disabled) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+.controls button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Slides are all one size on every screen. */
+.track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.4rem;
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: var(--gutter);
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+.track > :global(li) {
+  flex: 0 0 min(76%, 300px);
+  scroll-snap-align: start;
+}

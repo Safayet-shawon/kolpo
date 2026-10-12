@@ -42,7 +42,7 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
         </div>
         <div className={`wrap ${styles.heroText}`}>
           <nav aria-label="Breadcrumb" className={styles.crumbs}>
-            <Link href="/projects">Our work</Link> <span aria-hidden="true">/</span> <Link href={cat.route}>{cat.short}</Link>
+            <Link href="/#work">Our work</Link> <span aria-hidden="true">/</span> <Link href={cat.route}>{cat.short}</Link>
           </nav>
           <h1 className="display">{p.title}</h1>
           <p className={styles.sum}>{p.summary}</p>

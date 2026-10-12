@@ -22,7 +22,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(to top, rgba(17, 17, 17, 0.82), rgba(17, 17, 17, 0.1) 60%), linear-gradient(to bottom, rgba(17, 17, 17, 0.45), transparent 22%);
+  background: linear-gradient(to top, rgba(28, 33, 66, 0.82), rgba(28, 33, 66, 0.1) 60%), linear-gradient(to bottom, rgba(28, 33, 66, 0.45), transparent 22%);
 }
 .heroText {
   display: grid;
@@ -45,13 +45,13 @@
 .sum {
   max-width: 46ch;
   font-size: var(--step-1);
-  color: rgba(250, 250, 248, 0.92);
+  color: rgba(255, 248, 239, 0.92);
 }
 .notice {
   padding: 1rem 1.2rem;
   margin-bottom: 2.5rem;
   border-left: 3px solid var(--accent);
-  background: rgba(47, 93, 80, 0.08);
+  background: rgba(194, 67, 43, 0.08);
   font-size: var(--step--1);
   max-width: 52rem;
 }
@@ -132,7 +132,7 @@
   line-height: 1.1;
 }
 .a {
-  color: rgba(250, 250, 248, 0.78);
+  color: rgba(255, 248, 239, 0.78);
   max-width: 44ch;
 }
 @media (min-width: 900px) {

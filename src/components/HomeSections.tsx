@@ -41,10 +41,11 @@ export function ServiceRow() {
   return (
     <ul className={styles.row}>
       {CARDS.map((c, i) => {
+        const tone = [styles.t0, styles.t1, styles.t2][i];
         const s = services[c.id];
         return (
           <Reveal as="li" key={c.id} delay={i * 80}>
-            <Link href={s.route} className={styles.card}>
+            <Link href={s.route} className={`${styles.card} ${tone}`}>
               <span className={styles.media}>
                 <Photo name={s.image.key} alt="" sizes="25vw" style={{ objectPosition: s.image.position ?? "50% 50%" }} />
               </span>
@@ -54,7 +55,7 @@ export function ServiceRow() {
         );
       })}
       <Reveal as="li" delay={240}>
-        <Link href="/contact?service=multiple" className={`${styles.card} ${styles.all}`}>
+        <Link href="/all-in-one" className={`${styles.card} ${styles.all}`}>
           <span className={`${styles.media} ${styles.allMedia}`}>
             <Logo variant="mark" tone="light" height={44} />
           </span>
