@@ -1,0 +1,118 @@
+.footprint {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.fill {
+  fill: rgba(244, 240, 232, 0.16);
+  opacity: 0;
+}
+.line,
+.thin {
+  fill: none;
+  stroke: #f4f0e8;
+  stroke-width: 3;
+  stroke-linejoin: miter;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.thin {
+  stroke-width: 1.5;
+  opacity: 0.8;
+}
+.label {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  letter-spacing: 0.2em;
+  fill: #f4f0e8;
+  opacity: 0;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 4px;
+}
+
+:global([data-state="active"]) .line,
+:global([data-state="past"]) .line {
+  animation: draw 1.6s var(--ease-in-out) 1.4s forwards;
+}
+:global([data-state="active"]) .thin,
+:global([data-state="past"]) .thin {
+  animation: draw 1.4s var(--ease-in-out) 2.2s forwards;
+}
+:global([data-state="active"]) .fill,
+:global([data-state="past"]) .fill {
+  animation: appear 0.9s ease-out 2.6s forwards;
+}
+:global([data-state="active"]) .label,
+:global([data-state="past"]) .label {
+  animation: appear 0.8s ease-out 3s forwards;
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes appear {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Material chips */
+.chips {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+.chips li {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  opacity: 0;
+  transform: translateY(6px);
+}
+.chips i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 0 0 5px rgba(244, 240, 232, 0.3);
+}
+.chips span {
+  padding: 0.3rem 0.7rem;
+  background: rgba(20, 18, 16, 0.62);
+  color: var(--on-dark);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+:global([data-state="active"]) .chips li {
+  animation: chip 0.8s var(--ease-out) forwards;
+}
+@keyframes chip {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (min-width: 900px) {
+  .chips {
+    display: block;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .line,
+  .thin {
+    stroke-dashoffset: 0;
+  }
+  .fill,
+  .label,
+  .chips li {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,238 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  min-height: 100dvh;
+  display: grid;
+  background: var(--paper);
+  color: var(--hero-fg, var(--on-dark));
+  overflow: clip;
+}
+
+/* While a pale drafting-canvas scene shows, copy and HUD switch to ink and the dark scrim fades away. */
+.hero[data-ink="true"] {
+  --hero-fg: var(--charcoal);
+  --hero-fg-soft: rgba(36, 34, 31, 0.82);
+  --hero-em: var(--accent);
+  --hero-accent: var(--accent);
+  --hero-line: rgba(36, 34, 31, 0.35);
+  --hero-shadow: none;
+  --hero-shadow-soft: none;
+  --hud-line: rgba(36, 34, 31, 0.3);
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--paper);
+}
+
+/* ---------- Scenes ---------- */
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--paper);
+}
+.scene[data-state="future"] {
+  opacity: 0;
+  visibility: hidden;
+}
+.scene[data-state="active"] {
+  z-index: 2;
+  visibility: visible;
+}
+.scene[data-state="past"] {
+  z-index: 1;
+  /* Stay painted under the incoming scene, then stop costing anything. */
+  visibility: hidden;
+  transition: visibility 0s linear 1.6s;
+}
+
+/* Entrances. The first scene is never animated in, so the LCP frame is visible immediately. */
+.scene[data-state="active"][data-enter="fade"] {
+  animation: enter-fade 1.3s var(--ease-in-out) both;
+}
+.scene[data-state="active"][data-enter="wipe"] {
+  animation: enter-wipe 1.5s var(--ease-in-out) both;
+}
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes enter-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* A scene whose image failed still reads as a calm architectural surface, never as a broken box. */
+.scene[data-failed="true"] {
+  background: linear-gradient(135deg, var(--paper-2), var(--stone));
+}
+
+/* ---------- Camera ---------- */
+.cam {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+.moving {
+  will-change: transform;
+}
+.scene:not([data-state="future"]) .moving {
+  animation: dolly var(--dur) cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+@keyframes dolly {
+  from {
+    transform: translate3d(var(--fx, 0), var(--fy, 0), 0) scale(var(--fs, 1));
+  }
+  to {
+    transform: translate3d(var(--tx, 0), var(--ty, 0), 0) scale(var(--ts, 1));
+  }
+}
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  color: var(--charcoal);
+}
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Legibility: a restrained bottom scrim for the headline; the top is handled by the nav. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(20, 18, 16, 0.78) 0%, rgba(20, 18, 16, 0.42) 34%, rgba(20, 18, 16, 0) 62%);
+  transition: opacity 0.6s var(--ease-out);
+}
+.hero[data-ink="true"] .scrim {
+  opacity: 0;
+}
+
+/* ---------- Content & HUD ---------- */
+.content {
+  position: relative;
+  z-index: 4;
+  align-self: end;
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding: calc(var(--header-h) + 3rem) var(--gutter) clamp(5.5rem, 4rem + 4vw, 7.5rem);
+}
+
+.hud {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 var(--gutter) 1.1rem;
+  max-width: var(--max);
+  margin-inline: auto;
+  font-size: var(--step--1);
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.1rem;
+  min-width: 0;
+}
+.ticks {
+  display: inline-flex;
+  gap: 5px;
+}
+.ticks i {
+  width: 22px;
+  height: 2px;
+  background: var(--hud-line, rgba(244, 240, 232, 0.35));
+  transition: background 0.5s;
+}
+.ticks i[data-on="true"] {
+  background: var(--hero-fg, var(--on-dark));
+}
+.label {
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.72rem;
+}
+.disclosure {
+  display: none;
+  opacity: 0.75;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+.controls {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+.controls button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.4rem 0.9rem;
+  background: rgba(20, 18, 16, 0.5);
+  border: 1px solid rgba(244, 240, 232, 0.55);
+  color: var(--on-dark);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.controls button:hover {
+  background: var(--paper);
+  color: var(--charcoal);
+}
+
+@media (min-width: 900px) {
+  .disclosure {
+    display: inline;
+  }
+}
+
+/* ---------- Pausing & boot ---------- */
+.hero[data-paused="true"] .scene,
+.hero[data-paused="true"] .scene * {
+  animation-play-state: paused !important;
+}
+:global(.js) .hero[data-boot="pending"] .stage {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene[data-state="active"][data-enter] {
+    animation: none;
+  }
+  .scene:not([data-state="future"]) .moving {
+    animation: none;
+  }
+}

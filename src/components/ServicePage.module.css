@@ -1,0 +1,49 @@
+.intro {
+  row-gap: 2rem;
+}
+.introHead,
+.introBody {
+  grid-column: 1 / -1;
+}
+.introHead {
+  display: grid;
+  gap: 1.2rem;
+}
+.introBody {
+  display: grid;
+  gap: 1.2rem;
+  max-width: 44rem;
+}
+@media (min-width: 900px) {
+  .introHead {
+    grid-column: 1 / span 6;
+  }
+  .introBody {
+    grid-column: 8 / span 5;
+    padding-top: 0.6rem;
+  }
+}
+.projects {
+  display: grid;
+  gap: 3rem 2.5rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) {
+  .projects {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.support {
+  position: relative;
+  background: var(--charcoal);
+  color: var(--on-dark);
+}
+.support img {
+  width: 100%;
+  max-height: 80vh;
+  object-fit: cover;
+}
+.caption {
+  padding-block: 0.9rem;
+  color: rgba(244, 240, 232, 0.7);
+}

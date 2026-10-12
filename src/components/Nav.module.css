@@ -1,0 +1,190 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  transition:
+    background 0.35s var(--ease-out),
+    color 0.35s var(--ease-out),
+    border-color 0.35s var(--ease-out);
+  border-bottom: 1px solid transparent;
+}
+
+.solid,
+.menuOpen {
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--charcoal);
+  border-bottom-color: var(--line);
+}
+
+/* Over the cinematic hero: light text with a soft top scrim, flipped to ink while a pale scene is showing. */
+.overHero {
+  color: var(--on-dark);
+  background: linear-gradient(to bottom, rgba(20, 18, 16, 0.5), rgba(20, 18, 16, 0));
+}
+:global(html[data-hero-tone="light"]) .overHero {
+  color: var(--charcoal);
+  background: none;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  height: var(--header-h);
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.logo {
+  width: 108px;
+  height: auto;
+}
+
+.desktop {
+  display: none;
+  align-items: center;
+  gap: 2.2rem;
+}
+.desktop ul {
+  display: flex;
+  gap: clamp(1.1rem, 2vw, 2.2rem);
+}
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s var(--ease-out);
+}
+.link:hover::after,
+.link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.55rem 1.2rem;
+  border: 1px solid currentColor;
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition:
+    background 0.25s,
+    color 0.25s;
+}
+.cta:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+}
+
+.toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-right: -10px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+}
+.bars {
+  position: relative;
+  width: 26px;
+  height: 12px;
+}
+.bars i {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.35s var(--ease-out);
+}
+.bars i:first-child {
+  top: 0;
+}
+.bars i:last-child {
+  bottom: 0;
+}
+.menuOpen .bars i:first-child {
+  transform: translateY(5.25px) rotate(45deg);
+}
+.menuOpen .bars i:last-child {
+  transform: translateY(-5.25px) rotate(-45deg);
+}
+
+.panel {
+  position: fixed;
+  inset: var(--header-h) 0 0 0;
+  background: var(--paper);
+  color: var(--charcoal);
+  padding: 2rem var(--gutter) 3rem;
+  overflow-y: auto;
+}
+.panel[hidden] {
+  display: none;
+}
+.panel li {
+  border-bottom: 1px solid var(--line);
+  animation: rise 0.6s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 60ms);
+}
+.panel li a {
+  display: block;
+  padding: 1rem 0;
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: 1.1;
+  text-decoration: none;
+}
+.panel li a[aria-current="page"] {
+  color: var(--accent);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@media (min-width: 1040px) {
+  .desktop {
+    display: flex;
+  }
+  .toggle,
+  .panel {
+    display: none;
+  }
+}

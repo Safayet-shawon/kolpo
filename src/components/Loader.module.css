@@ -1,0 +1,85 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  color: var(--charcoal);
+  transition: clip-path 0.7s var(--ease-in-out);
+  clip-path: inset(0 0 0 0);
+  /* Pure-CSS safety net if scripts fail: always release the page. */
+  animation: failsafe 0.5s linear 4.2s forwards;
+}
+
+.leaving {
+  clip-path: inset(0 0 100% 0);
+}
+
+.inner {
+  display: grid;
+  justify-items: center;
+  gap: 1.4rem;
+  padding-inline: var(--gutter);
+}
+
+.mark {
+  width: min(62vw, 340px);
+  height: auto;
+}
+
+.sub {
+  font-size: var(--step--1);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--concrete-d);
+  opacity: 0;
+  animation: fade-up 0.8s var(--ease-out) 0.7s forwards;
+}
+
+/* Wordmark stroke drawing (paths are normalised with pathLength=1) */
+:global(.wm-draw) {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: wm 0.9s var(--ease-in-out) forwards;
+  animation-delay: calc(var(--i) * 90ms);
+}
+
+@keyframes wm {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+/* Returning in the same session: skip it before first paint (class set by inline script in layout). */
+:global(html[data-seen="1"]) .loader {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.wm-draw) {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+  .sub {
+    opacity: 1;
+    animation: none;
+  }
+}
