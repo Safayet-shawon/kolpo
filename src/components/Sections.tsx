@@ -91,23 +91,15 @@ export function RelatedServices({ current, ids }: { current: Category; ids?: Cat
   );
 }
 
-export function CtaBand({
-  title = "Have a site, a space or an idea?",
-  body = "Tell us what you are planning. We’ll respond with how we would approach it.",
-}: {
-  title?: string;
-  body?: string;
-}) {
+export function CtaBand({ title = "Start a project" }: { title?: string; body?: string }) {
   return (
     <section className={`section section--dark ${styles.cta}`} aria-labelledby="cta-title">
       <div className="wrap">
         <Reveal className={styles.ctaInner}>
-          <p className="eyebrow">Start a project</p>
-          <h2 id="cta-title" className="display">{title}</h2>
-          <p className="lede">{body}</p>
+          <h2 id="cta-title" className="h2">{title}</h2>
           <div className={styles.ctaActions}>
             <Link href="/contact" className="btn btn--ghost">
-              Discuss your project <span aria-hidden="true">→</span>
+              Contact us
             </Link>
             {site.contactEmail ? (
               <a className="arrow-link" href={`mailto:${site.contactEmail}`}>

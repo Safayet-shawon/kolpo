@@ -3,19 +3,19 @@ import gsap from "gsap";
 
 /** Restrained architectural-model palette: ivory, limestone, charcoal, sage, brass. */
 export const C = {
-  bg: 0xf4f0e8,
-  ivory: 0xf2eee3,
-  white: 0xfaf8f3,
-  limestone: 0xddd3bf,
-  stone: 0xcfc6b2,
-  concrete: 0xbdb9af,
+  bg: 0xfafaf8,
+  ivory: 0xf4f4f0,
+  white: 0xffffff,
+  limestone: 0xe0ded7,
+  stone: 0xd2d0c8,
+  concrete: 0xc0bfba,
   charcoal: 0x2a2927,
-  sage: 0x9aa98d,
-  sageDark: 0x73846a,
+  sage: 0x9db3a3,
+  sageDark: 0x6f8c7c,
   brass: 0xb08d57,
-  water: 0xaebcbc,
-  soil: 0xa99679,
-  brick: 0xd4c4aa,
+  water: 0xb4c6c8,
+  soil: 0xb4aa98,
+  brick: 0xd8cbb6,
   oak: 0xc9a77a,
 };
 

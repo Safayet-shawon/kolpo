@@ -26,11 +26,10 @@ export default function Footer() {
           <nav aria-label="Company" className={styles.col}>
             <h2>Studio</h2>
             <ul>
-              {nav.slice(3).map((n) => (
+              {nav.slice(4).map((n) => (
                 <li key={n.href}><Link href={n.href}>{n.label}</Link></li>
               ))}
               <li><Link href="/journal">Journal</Link></li>
-              <li><Link href="/contact">Contact</Link></li>
             </ul>
           </nav>
 

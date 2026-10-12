@@ -23,13 +23,11 @@ export interface Controller {
 
 async function load(id: SceneId): Promise<Builder> {
   switch (id) {
-    case "home": {
-      const { buildMasterplan } = await import("./scenes/masterplan");
-      return buildMasterplan("home");
-    }
+    case "home":
+      return (await import("./scenes/construction")).buildStory;
     case "architecture": {
       const { buildMasterplan } = await import("./scenes/masterplan");
-      return buildMasterplan("architecture");
+      return buildMasterplan();
     }
     case "interior":
       return (await import("./scenes/interior")).buildInterior;
@@ -49,7 +47,8 @@ export async function createStage(host: HTMLElement, canvas: HTMLCanvasElement, 
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(C.bg);
-  if (id !== "interior") scene.fog = new THREE.Fog(C.bg, 230, 520);
+  if (id === "construction" || id === "home") scene.fog = new THREE.Fog(C.bg, 85, 240);
+  else if (id !== "interior") scene.fog = new THREE.Fog(C.bg, 230, 520);
 
   const hemi = new THREE.HemisphereLight(0xfff6ea, 0xd9d1c0, 0.8);
   const sun = new THREE.DirectionalLight(0xfff3e4, 1.7);
@@ -66,9 +65,8 @@ export async function createStage(host: HTMLElement, canvas: HTMLCanvasElement, 
   sun.shadow.camera.far = 420;
   scene.add(hemi, sun);
 
-  const portrait = host.clientHeight > host.clientWidth;
   const baseFov = id === "interior" ? 40 : id === "construction" ? 32 : 34;
-  const camera = new THREE.PerspectiveCamera(portrait ? Math.min(baseFov * 1.55, 60) : baseFov, 1, 0.3, 800);
+  const camera = new THREE.PerspectiveCamera(baseFov, 1, 0.3, 800);
   const target = new THREE.Vector3();
   const ctx: Ctx = { scene, camera, renderer, target, sun, hemi, mobile };
 
@@ -82,10 +80,12 @@ export async function createStage(host: HTMLElement, canvas: HTMLCanvasElement, 
     const h = Math.max(1, host.clientHeight);
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    const narrow = w < 900;
-    camera.fov = h > w ? Math.min(baseFov * 1.55, 62) : baseFov;
-    if (narrow) camera.setViewOffset(w, h, 0, h * 0.2, w, h);
-    else camera.setViewOffset(w, h, -w * (id === "interior" ? 0.2 : 0.13), 0, w, h);
+    // Keep the same horizontal framing as on a laptop: widen the view as the screen gets narrower.
+    const t = Math.min(1, Math.max(0, (1.25 - w / h) / 0.75));
+    camera.fov = baseFov * (1 + 0.3 * t);
+    camera.zoom = 1 - 0.4 * t;
+    // Same composition on every screen: model sits slightly right of centre and above the copy.
+    camera.setViewOffset(w, h, -w * 0.05, h * 0.16, w, h);
     camera.updateProjectionMatrix();
     dirty = true;
   };

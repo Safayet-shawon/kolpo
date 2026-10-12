@@ -141,10 +141,9 @@ function treeList() {
   return t;
 }
 
-export function buildMasterplan(variant: "architecture" | "home"): Builder {
+export function buildMasterplan(): Builder {
   return (ctx) => {
-    const home = variant === "home";
-    const k = home ? 0.56 : 1;
+    const k = 1;
     const T = (t: number) => t * k;
     const tl = gsap.timeline({ paused: true });
     const { scene } = ctx;
@@ -313,54 +312,18 @@ export function buildMasterplan(variant: "architecture" | "home"): Builder {
     camTo(tl, ctx, [-14, 150, 66], [0, 0, 0], T(2.6), T(6.6), "sine.inOut");
     camTo(tl, ctx, [62, 136, 130], [0, 0, 2], T(9.6), T(5.4), "sine.inOut");
 
-    const stages: Stage[] = [];
-    let end: number;
-
-    if (!home) {
-      camTo(tl, ctx, [122, 108, 164], [0, 0, 6], T(19.4), T(5.0), "sine.inOut");
-      end = T(25);
-      stages.push(
-        { at: 0, label: "Empty site" },
-        { at: 2.4, label: "Site boundary & survey grid" },
-        { at: 5.0, label: "Roads & circulation" },
-        { at: 7.6, label: "Residential plot layout" },
-        { at: 9.4, label: "Building footprints" },
-        { at: 11.4, label: "Three-dimensional massing" },
-        { at: 16.2, label: "Landscape & community" },
-        { at: 19.6, label: "The finished masterplan" },
-      );
-    } else {
-      // Focus house: pull the layers apart, then reassemble.
-      const focus = houses.reduce((best, h) => (Math.hypot(h.cx + 4, h.cz + 16) < Math.hypot(best.cx + 4, best.cz + 16) ? h : best));
-      const f0 = T(19.4);
-      camTo(tl, ctx, [focus.cx + 24, 17, focus.cz + 30], [focus.cx, 4, focus.cz], f0, 2.4, "power2.inOut");
-      const lift = [0, 3.4, 6.4];
-      const explodeAt = f0 + 2.2;
-      const guides = new Lines();
-      const half = (focus.fp.x1 - focus.fp.x0) / 2;
-      const halfD = (focus.fp.z1 - focus.fp.z0) / 2;
-      for (const sx of [-1, 1])
-        for (const sz of [-1, 1]) guides.seg([focus.cx + sx * half, 0.1, focus.cz + sz * halfD], [focus.cx + sx * half, 2 * LEVEL_H + 7.5, focus.cz + sz * halfD]);
-      scene.add(guides.build(C.brass, 0.9));
-      guides.draw(tl, explodeAt, 1.0, "power2.out");
-      focus.levels.forEach((m, i) => {
-        tl.to(m.position, { y: i * LEVEL_H + lift[i], duration: 1.3, ease: "power3.inOut" }, explodeAt);
-        tl.to(m.position, { y: i * LEVEL_H, duration: 1.3, ease: "power3.inOut" }, explodeAt + 2.3);
-      });
-      const roofBase = focus.nLevels * LEVEL_H;
-      tl.to(focus.roof.position, { y: roofBase + lift[2] + 2.4, duration: 1.3, ease: "power3.inOut" }, explodeAt);
-      tl.to(focus.roof.position, { y: roofBase, duration: 1.3, ease: "power3.inOut" }, explodeAt + 2.3);
-      guides.fadeOut(tl, explodeAt + 2.4, 0.9);
-      camTo(tl, ctx, [116, 102, 156], [0, 0, 6], explodeAt + 2.6, 4.2, "sine.inOut");
-      end = explodeAt + 7.0;
-      stages.push(
-        { at: 0, label: "Empty canvas" },
-        { at: T(2.4), label: "The masterplan emerges" },
-        { at: T(11.4), label: "Building masses rise" },
-        { at: f0, label: "Architecture takes shape" },
-        { at: explodeAt + 2.6, label: "KOLPO" },
-      );
-    }
+    camTo(tl, ctx, [122, 108, 164], [0, 0, 6], T(19.4), T(5.0), "sine.inOut");
+    const end = T(25);
+    const stages: Stage[] = [
+      { at: 0, label: "Empty site" },
+      { at: 2.4, label: "Site boundary & survey grid" },
+      { at: 5.0, label: "Roads & circulation" },
+      { at: 7.6, label: "Residential plot layout" },
+      { at: 9.4, label: "Building footprints" },
+      { at: 11.4, label: "Three-dimensional massing" },
+      { at: 16.2, label: "Landscape & community" },
+      { at: 19.6, label: "The finished masterplan" },
+    ];
 
     // pad the timeline so the final composition holds
     tl.to({}, { duration: 0.01 }, end);
@@ -368,5 +331,3 @@ export function buildMasterplan(variant: "architecture" | "home"): Builder {
   };
 }
 
-/** Exported for tests / reuse. */
-export const MASTERPLAN_HOUSES = () => planHouses().list.length;

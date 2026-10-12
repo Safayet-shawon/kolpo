@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import gsap from "gsap";
-import { C, Lines, Trees, baseBox, camTo, mesh, outline, pop, rise, rnd, std, type Builder, type Stage, type V3 } from "../common";
+import { C, Lines, Trees, baseBox, camTo, canvasTexture, mesh, outline, pop, rise, rnd, std, type Builder, type Stage, type V3 } from "../common";
+import { makeFlatFurniture } from "../furniture";
 
 /**
  * One building, one footprint, one camera family, from start to finish. Every stage adds to the previous one:
@@ -46,8 +47,9 @@ const WALLS = {
   right: { origin: [BX - 0.1, -BZ + 0.1] as [number, number], dir: [0, 1] as [number, number], len: 2 * BZ - 0.2, rotY: Math.PI / 2, center: 0 },
 };
 
-export const buildConstruction: Builder = (ctx) => {
-  const k = 0.64;
+/** story = the home-page film: design → construction → one flat opened up and furnished (slower pacing). */
+const make = (story: boolean): Builder => (ctx) => {
+  const k = story ? 0.82 : 0.64;
   const T = (t: number) => t * k;
   const tl = gsap.timeline({ paused: true });
   const { scene } = ctx;
@@ -92,11 +94,11 @@ export const buildConstruction: Builder = (ctx) => {
   site.position.y = 0.005;
   site.receiveShadow = true;
   scene.add(site);
-  const soil = new THREE.Color(0xd9cdb4);
+  const soil = new THREE.Color(0xe4e2db);
   tl.to(siteMat.color, { r: soil.r, g: soil.g, b: soil.b, duration: T(1.4) }, T(0.5));
 
   // cover over the (future) pit so the plot reads as flat, undisturbed ground
-  const coverMat = std(0xd9cdb4, { transparent: true });
+  const coverMat = std(0xe4e2db, { transparent: true });
   const cover = new THREE.Mesh(new THREE.PlaneGeometry(PX * 2, PZ * 2), coverMat);
   cover.rotation.x = -Math.PI / 2;
   cover.position.y = 0.006;
@@ -139,6 +141,19 @@ export const buildConstruction: Builder = (ctx) => {
   );
   scene.add(fp.build(C.charcoal, 1));
   fp.draw(tl, T(4.0), T(1.4));
+  if (story) {
+    // the DESIGN: two flats per floor, party wall and partitions drawn as plan linework
+    const plan = new Lines();
+    plan.seg([0, 0.07, -BZ], [0, 0.07, BZ]);
+    for (const sx of [-1, 1]) {
+      plan.seg([sx * 0.2, 0.07, -1.4], [sx * (BX - 0.2), 0.07, -1.4]);
+      plan.seg([sx * 3.6, 0.07, -BZ + 0.2], [sx * 3.6, 0.07, -1.4]);
+      plan.seg([sx * 5.6, 0.07, -1.4], [sx * 5.6, 0.07, 0.6]);
+    }
+    scene.add(plan.build(C.charcoal, 0.85));
+    plan.draw(tl, T(5.2), T(2.2));
+    plan.fadeOut(tl, T(13), T(1.5));
+  }
   const ghost = new THREE.Mesh(baseBox(2 * BX, TOP + 0.4, 2 * BZ), std(0xffffff, { transparent: true, opacity: 0 }));
   ghost.castShadow = false;
   const ghostEdges = new THREE.LineSegments(new THREE.EdgesGeometry(ghost.geometry), new THREE.LineBasicMaterial({ color: C.brass, transparent: true, opacity: 1 }));
@@ -304,8 +319,8 @@ export const buildConstruction: Builder = (ctx) => {
   const BH = 0.19;
   const BT = 0.2;
   const coursesPerStorey = Math.floor((SH - 0.3) / BH);
-  type Brick = { x: number; y: number; z: number; rot: number; shade: number; order: number };
-  const bricks: Brick[] = [];
+  type Brick = { x: number; y: number; z: number; rot: number; shade: number; order: number; flat: boolean; t: number };
+  const all: Brick[] = [];
   for (let s = 0; s < STOREYS; s++) {
     for (let c = 0; c < coursesPerStorey; c++) {
       const y = GROUND + s * SH + c * BH + BH / 2;
@@ -319,36 +334,71 @@ export const buildConstruction: Builder = (ctx) => {
             (o) => o.wall === name && Math.abs(centered - o.c) < o.w / 2 + 0.02 && y + BH / 2 > o.y0 && y - BH / 2 < o.y1,
           );
           if (hit) continue;
-          bricks.push({
-            x: w.origin[0] + w.dir[0] * u,
+          const x = w.origin[0] + w.dir[0] * u;
+          all.push({
+            x,
             z: w.origin[1] + w.dir[1] * u,
             y,
             rot: w.rotY,
-            shade: rnd(bricks.length + 5),
+            shade: rnd(all.length + 5),
             order: s * 1000 + c * 4 + Object.keys(WALLS).indexOf(name) + rnd(i) * 0.5,
+            // the front wall of the right-hand first-floor flat is built separately so it can be taken away later
+            flat: story && name === "front" && s === 1 && x >= 0.3,
+            t: 0,
           });
         }
       }
     }
   }
-  bricks.sort((a, b) => a.order - b.order);
-  const brickMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(BL - 0.015, BH - 0.015, BT), std(0xffffff, { roughness: 0.95 }), bricks.length);
-  brickMesh.castShadow = true;
-  brickMesh.receiveShadow = true;
+  all.sort((a, b) => a.order - b.order);
+  all.forEach((b, i) => (b.t = i / (all.length - 1)));
+  const brickGeo = new THREE.BoxGeometry(BL - 0.015, BH - 0.015, BT);
+  const brickMat = std(0xffffff, { roughness: 0.95 });
   const m4 = new THREE.Matrix4();
   const q = new THREE.Quaternion();
+  const yAxis = new THREE.Vector3(0, 1, 0);
   const col = new THREE.Color();
-  bricks.forEach((b, i) => {
-    q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), b.rot);
-    m4.compose(new THREE.Vector3(b.x, b.y, b.z), q, new THREE.Vector3(1, 1, 1));
-    brickMesh.setMatrixAt(i, m4);
-    col.setHex(C.brick).offsetHSL(0, (b.shade - 0.5) * 0.04, (b.shade - 0.5) * 0.08);
-    brickMesh.setColorAt(i, col);
-  });
-  brickMesh.count = 0;
-  scene.add(brickMesh);
+  const makeBricks = (list: Brick[]) => {
+    const im = new THREE.InstancedMesh(brickGeo, brickMat, Math.max(1, list.length));
+    im.castShadow = true;
+    im.receiveShadow = true;
+    list.forEach((b, i) => {
+      q.setFromAxisAngle(yAxis, b.rot);
+      m4.compose(new THREE.Vector3(b.x, b.y, b.z), q, new THREE.Vector3(1, 1, 1));
+      im.setMatrixAt(i, m4);
+      col.setHex(C.brick).offsetHSL(0, (b.shade - 0.5) * 0.04, (b.shade - 0.5) * 0.08);
+      im.setColorAt(i, col);
+    });
+    im.count = 0;
+    scene.add(im);
+    return { im, list, ts: list.map((b) => b.t) };
+  };
+  const lowerBound = (ts: number[], v: number) => {
+    let lo = 0;
+    let hi = ts.length;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (ts[mid] < v) lo = mid + 1;
+      else hi = mid;
+    }
+    return lo;
+  };
+  const mainBricks = makeBricks(all.filter((b) => !b.flat));
+  const flatBricks = makeBricks(all.filter((b) => b.flat));
   const progress = { n: 0 };
-  tl.to(progress, { n: bricks.length, duration: T(4.4), ease: "none", onUpdate: () => (brickMesh.count = Math.floor(progress.n)) }, T(22.8));
+  tl.to(
+    progress,
+    {
+      n: 1.0001,
+      duration: T(4.4),
+      ease: "none",
+      onUpdate: () => {
+        mainBricks.im.count = lowerBound(mainBricks.ts, progress.n);
+        flatBricks.im.count = story ? lowerBound(flatBricks.ts, progress.n) : 0;
+      },
+    },
+    T(22.8),
+  );
 
   // ── windows, doors & facade ──
   const glassMat = new THREE.MeshStandardMaterial({ color: 0xcfdcdf, transparent: true, opacity: 0.35, roughness: 0.05, metalness: 0.1 });
@@ -391,6 +441,9 @@ export const buildConstruction: Builder = (ctx) => {
     tl.set(g, { visible: true }, T(27.6) + front + (i % 9) * T(0.12));
     tl.to(g.scale, { x: 1, y: 1, z: 1, duration: T(0.5), ease: "back.out(1.6)" }, T(27.6) + front + (i % 9) * T(0.12));
   });
+  const flatFrames = frames.filter(
+    (_, i) => ops[i].wall === "front" && ops[i].c === 4.3 && Math.abs(ops[i].y0 - (GROUND + SH + 0.85)) < 0.01,
+  );
   const canopy = mesh(new THREE.BoxGeometry(2.8, 0.1, 1.4), std(C.brass, { metalness: 0.5, roughness: 0.4 }), [0, GROUND + 2.55, BZ + 0.55]);
   scene.add(canopy);
   canopy.visible = false;
@@ -473,6 +526,120 @@ export const buildConstruction: Builder = (ctx) => {
   scene.add(trees.group);
   trees.animate(tl, T(34.8), T(2.4));
 
+  // ── story only: open one flat on the first floor and furnish it ──
+  if (story) {
+    const FY = GROUND + SH;
+    const CEIL = FY + SH - 0.3;
+    const FX0 = 0.3;
+    const FX1 = 6.75;
+    const open = T(38.4);
+
+    // the front wall of that flat dissolves, brick by brick, top to bottom
+    const dis = { v: 0 };
+    const applyDissolve = () => {
+      flatBricks.list.forEach((b, i) => {
+        const delay = ((CEIL - b.y) / SH) * 0.3 + rnd(i) * 0.25;
+        const sc = Math.max(0.0001, 1 - Math.min(1, Math.max(0, (dis.v - delay) / 0.4)));
+        q.setFromAxisAngle(yAxis, b.rot);
+        m4.compose(new THREE.Vector3(b.x, b.y, b.z), q, new THREE.Vector3(sc, sc, sc));
+        flatBricks.im.setMatrixAt(i, m4);
+      });
+      flatBricks.im.instanceMatrix.needsUpdate = true;
+    };
+    tl.to(dis, { v: 1, duration: T(2.6), ease: "none", onUpdate: applyDissolve }, open);
+    tl.set(flatBricks.im, { visible: false }, open + T(2.7));
+    flatFrames.forEach((g) => {
+      tl.to(g.scale, { x: 0.001, y: 0.001, z: 0.001, duration: T(0.6), ease: "power2.in" }, open - T(0.2));
+      tl.set(g, { visible: false }, open + T(0.5));
+    });
+
+    // party wall, back partition, wall finish
+    const wallMat = std(0xf6f6f2);
+    const party = mesh(baseBox(0.2, SH - 0.3, 2 * (BZ - 0.3)), wallMat, [0.2, FY, 0]);
+    outline(party, C.charcoal, 0.3);
+    scene.add(party);
+    rise(tl, party, T(40.8), T(1.0));
+    const back = mesh(baseBox(FX1 - FX0, SH - 0.3, 0.14), wallMat, [(FX0 + FX1) / 2, FY, -1.4]);
+    outline(back, C.charcoal, 0.3);
+    scene.add(back);
+    rise(tl, back, T(41.2), T(1.0));
+    const finish = new THREE.Color(0xe9e7e0);
+    tl.to(wallMat.color, { r: finish.r, g: finish.g, b: finish.b, duration: T(1.6) }, T(43));
+
+    // oak floor wipes in from the left
+    const plank = canvasTexture(
+      512,
+      512,
+      (g) => {
+        g.fillStyle = "#c8a679";
+        g.fillRect(0, 0, 512, 512);
+        for (let r = 0; r < 8; r++) {
+          let x = -rnd(r + 40) * 150;
+          while (x < 512) {
+            const len = 140 + rnd(r * 17 + x) * 150;
+            const tone = 168 + Math.floor(rnd(r * 31 + x * 0.1) * 34);
+            g.fillStyle = `rgb(${tone + 30},${tone - 2},${tone - 50})`;
+            g.fillRect(x, r * 64, len, 62);
+            x += len;
+          }
+        }
+      },
+      [1.6, 2],
+    );
+    const woodGeo = new THREE.PlaneGeometry(FX1 - FX0, 2 * (BZ - 0.3));
+    woodGeo.translate((FX1 - FX0) / 2, 0, 0);
+    const wood = new THREE.Mesh(woodGeo, std(0xffffff, { map: plank, roughness: 0.55 }));
+    wood.rotation.x = -Math.PI / 2;
+    wood.position.set(FX0, FY + 0.01, 0);
+    wood.receiveShadow = true;
+    wood.scale.x = 0.001;
+    scene.add(wood);
+    tl.to(wood.scale, { x: 1, duration: T(2.0), ease: "power2.inOut" }, T(42.2));
+
+    // furniture, in a considered order, inside the structural bays
+    const f = makeFlatFurniture();
+    const place = (g: THREE.Group, x: number, z: number, rotY = 0) => {
+      g.position.set(x, FY + 0.012, z);
+      g.rotation.y = rotY;
+      scene.add(g);
+    };
+    place(f.rug, 4.35, 1.5);
+    place(f.sofa, 4.35, -0.75);
+    place(f.table, 4.35, 0.95);
+    place(f.chairL, 2.95, 1.2, Math.PI / 2 - 0.3);
+    place(f.chairR, 5.8, 1.2, -Math.PI / 2 + 0.3);
+    place(f.lamp, 6.1, -0.95);
+    place(f.plant, 6.2, 3.55);
+    place(f.deco, 4.35, 0.95);
+    [f.rug, f.sofa, f.table, f.chairL, f.chairR, f.lamp, f.plant, f.deco].forEach((g, i) => rise(tl, g, T(45.2) + i * T(0.55), T(0.9), "expo.out"));
+    f.pendant.position.set(4.35, CEIL, 0.95);
+    scene.add(f.pendant);
+    f.pendant.visible = false;
+    f.pendant.scale.y = 0.001;
+    tl.set(f.pendant, { visible: true }, T(44.2));
+    tl.to(f.pendant.scale, { y: 1, duration: T(1.3), ease: "power3.out" }, T(44.2));
+
+    // a framed piece on the back partition
+    const art = new THREE.Group();
+    art.add(mesh(new THREE.BoxGeometry(1.4, 0.9, 0.04), std(C.charcoal), [0, 0, 0], false));
+    art.add(mesh(new THREE.BoxGeometry(1.3, 0.8, 0.045), std(0xf1efe8), [0, 0, 0.005], false));
+    art.add(mesh(new THREE.CircleGeometry(0.26, 32), std(C.brass), [-0.25, 0.02, 0.032], false));
+    art.add(mesh(new THREE.PlaneGeometry(0.4, 0.5), std(C.sageDark), [0.3, -0.02, 0.03], false));
+    art.position.set(4.35, FY + 1.65, -1.31);
+    art.visible = false;
+    art.scale.setScalar(0.001);
+    scene.add(art);
+    tl.set(art, { visible: true }, T(49));
+    tl.to(art.scale, { x: 1, y: 1, z: 1, duration: T(0.8), ease: "back.out(1.4)" }, T(49));
+
+    // lights on
+    const light = new THREE.PointLight(0xffd9a0, 0, 8, 2);
+    light.position.set(4.35, CEIL - 0.9, 1.2);
+    scene.add(light);
+    tl.to(f.glow, { emissiveIntensity: 1.2, duration: T(1.6), ease: "power2.inOut" }, T(50.4));
+    tl.to(light, { intensity: 11, duration: T(1.6) }, T(50.4));
+  }
+
   // ── camera: aerial → descending → front three-quarter ──
   ctx.camera.position.set(0, 88, 30);
   ctx.target.set(0, 0, 0);
@@ -480,19 +647,32 @@ export const buildConstruction: Builder = (ctx) => {
   camTo(tl, ctx, [46, 46, 54], [0, 2, 0], T(4.2), T(5.8), "sine.inOut");
   camTo(tl, ctx, [42, 31, 54], [0, 3, 0], T(10), T(11), "sine.inOut");
   camTo(tl, ctx, [40, 22, 54], [0, 4.5, 0], T(21), T(10), "sine.inOut");
-  camTo(tl, ctx, [32, 11, 46], [0, 4.8, 0], T(31.5), T(7.5), "power2.inOut");
+  camTo(tl, ctx, [32, 11, 46], [0, 4.8, 0], T(31.5), T(story ? 5 : 7.5), "power2.inOut");
+  if (story) camTo(tl, ctx, [10.8, 6.3, 19.5], [3.4, 4.9, 0], T(37.2), T(5), "power2.inOut");
 
+  const L = (a: string, b: string) => (story ? a : b);
   const stages: Stage[] = [
-    { at: 0, label: "Empty site & surveyed boundary" },
-    { at: T(4.0), label: "Building footprint & proposal" },
-    { at: T(8.0), label: "Excavation & foundation layout" },
-    { at: T(11.0), label: "Foundations & structural base" },
-    { at: T(14.4), label: "Columns, beams & floor slabs" },
-    { at: T(22.2), label: "Brickwork & enclosure" },
-    { at: T(27.4), label: "Windows, doors & facade" },
-    { at: T(29.8), label: "Exterior finishing" },
-    { at: T(32.6), label: "Landscaping & completion" },
+    { at: 0, label: L("Design: surveying the site", "Empty site & surveyed boundary") },
+    { at: T(4.0), label: L("Design: plan & building proposal", "Building footprint & proposal") },
+    { at: T(8.0), label: L("Construction: excavation", "Excavation & foundation layout") },
+    { at: T(11.0), label: L("Construction: foundations", "Foundations & structural base") },
+    { at: T(14.4), label: L("Construction: frame & slabs", "Columns, beams & floor slabs") },
+    { at: T(22.2), label: L("Construction: brickwork", "Brickwork & enclosure") },
+    { at: T(27.4), label: L("Construction: windows & doors", "Windows, doors & facade") },
+    { at: T(29.8), label: L("Construction: finishing", "Exterior finishing") },
+    { at: T(32.6), label: L("Completion & landscaping", "Landscaping & completion") },
+    ...(story
+      ? [
+          { at: T(37.2), label: "A first-floor flat is opened up" },
+          { at: T(42), label: "Interior: floor, walls & ceiling" },
+          { at: T(44.8), label: "Interior: furniture" },
+          { at: T(50.2), label: "Interior: lights on" },
+        ]
+      : []),
   ];
-  tl.to({}, { duration: 0.01 }, T(40));
+  tl.to({}, { duration: 0.01 }, T(story ? 56 : 40));
   return { tl, stages };
 };
+
+export const buildConstruction = make(false);
+export const buildStory = make(true);

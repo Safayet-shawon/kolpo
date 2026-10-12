@@ -20,13 +20,10 @@ export default function ServiceBody({ id }: { id: Category }) {
         <div className="wrap">
           <div className={`grid-12 ${styles.intro}`}>
             <Reveal className={styles.introHead}>
-              <p className="eyebrow">{s.short}</p>
               <h2 id="svc-intro" className="h2">{s.intro.heading}</h2>
             </Reveal>
             <Reveal className={styles.introBody} delay={120}>
-              {s.intro.body.map((p) => (
-                <p key={p} className={p === s.intro.body[0] ? "lede" : "muted"}>{p}</p>
-              ))}
+              <p className="lede">{s.intro.body[0]}</p>
             </Reveal>
           </div>
         </div>
@@ -34,18 +31,15 @@ export default function ServiceBody({ id }: { id: Category }) {
 
       <section className="section section--stone" aria-labelledby="svc-caps">
         <div className="wrap">
-          <SectionHead eyebrow="Capabilities" title={<span id="svc-caps">What this covers</span>} />
+          <SectionHead title={<span id="svc-caps">What we do</span>} />
           <CapabilityList items={s.capabilities} />
-          <p className="small muted" style={{ marginTop: "1.5rem" }}>
-            Scope is agreed project by project. Tell us what you need and we’ll confirm how we can help.
-          </p>
         </div>
       </section>
 
       {pair ? (
         <section className="section" aria-labelledby="svc-ba">
           <div className="wrap">
-            <SectionHead eyebrow="Before & after" title={<span id="svc-ba">The same room, transformed</span>} />
+            <SectionHead title={<span id="svc-ba">Before and after</span>} />
             <BeforeAfter before={pair.before} after={pair.after} alt={pair.alt} />
           </div>
         </section>
@@ -54,9 +48,7 @@ export default function ServiceBody({ id }: { id: Category }) {
       <section className={pair ? "section section--stone" : "section"} aria-labelledby="svc-work">
         <div className="wrap">
           <SectionHead
-            eyebrow="Relevant projects"
-            title={<span id="svc-work">Work in this discipline</span>}
-            lede="Concept projects that illustrate our approach. Each is labelled; completed work will be added once confirmed."
+            title={<span id="svc-work">Projects</span>}
           />
           <div className={styles.projects}>
             {list.map((p) => (
@@ -71,7 +63,7 @@ export default function ServiceBody({ id }: { id: Category }) {
 
       <section className={`section section--dark`} aria-labelledby="svc-process">
         <div className="wrap">
-          <SectionHead eyebrow="Process" title={<span id="svc-process">How a project unfolds</span>} />
+          <SectionHead title={<span id="svc-process">Process</span>} />
           <ProcessList steps={s.process} dark />
         </div>
       </section>
@@ -83,7 +75,7 @@ export default function ServiceBody({ id }: { id: Category }) {
 
       <section className="section" aria-labelledby="svc-related">
         <div className="wrap">
-          <SectionHead eyebrow="Related services" title={<span id="svc-related">Works best together</span>} />
+          <SectionHead title={<span id="svc-related">Related services</span>} />
           <RelatedServices current={id} ids={s.related} />
         </div>
       </section>

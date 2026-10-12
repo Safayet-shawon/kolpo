@@ -3,26 +3,20 @@ import ThreeStage from "./ThreeStage";
 import styles from "./HeroCopy.module.css";
 
 function Copy({
-  eyebrow,
   title,
-  lede,
   primary,
   secondary,
 }: {
-  eyebrow: string;
   title: React.ReactNode;
-  lede: string;
   primary: { href: string; label: string };
   secondary?: { href: string; label: string };
 }) {
   return (
     <div className={styles.copy}>
-      <p className={`eyebrow ${styles.eyebrow}`}>{eyebrow}</p>
       <h1 className={styles.title}>{title}</h1>
-      <p className={styles.lede}>{lede}</p>
       <div className={styles.actions}>
         <Link href={primary.href} className="btn">
-          {primary.label} <span aria-hidden="true">→</span>
+          {primary.label}
         </Link>
         {secondary ? (
           <Link href={secondary.href} className="btn btn--ghost btn--onlight">
@@ -38,18 +32,16 @@ export function HeroHome() {
   return (
     <ThreeStage
       id="home"
-      description="Introductory 3D sequence: an empty ivory drafting plane gains a survey grid and boundary, then roads, plots and buildings that rise into a residential masterplan; one house separates into its layers and reassembles."
-      fallbackImage="arch-colony-aerial"
-      fallbackAlt="Aerial view of a planned residential community around a central park"
+      description="Introductory 3D film: a building is designed on an empty site, constructed stage by stage, and finally one flat on the first floor is opened up and furnished."
+      fallbackImage="cons-6-front"
+      fallbackAlt="Finished limestone-coloured house with a stepped entrance path"
     >
       <Copy
-        eyebrow="Architecture · Interior design · Construction"
         title={
           <>
             Spaces Designed to Become <em>Places.</em>
           </>
         }
-        lede="Architecture, interiors, and construction shaped around the way people live."
         primary={{ href: "/projects", label: "Explore Our Work" }}
         secondary={{ href: "/#services", label: "Discover Our Services" }}
       />
@@ -66,13 +58,11 @@ export function HeroArchitecture() {
       fallbackAlt="Aerial view of a planned residential community around a central park"
     >
       <Copy
-        eyebrow="Architecture & community design"
         title={
           <>
             We Shape the Spaces Where <em>Life Unfolds.</em>
           </>
         }
-        lede="Roads, plots, landscape and homes designed together, so a colony feels like one place and not a row of lots."
         primary={{ href: "/projects?category=architecture", label: "Explore Architecture Projects" }}
         secondary={{ href: "/contact", label: "Start a project" }}
       />
@@ -89,13 +79,11 @@ export function HeroInterior() {
       fallbackAlt="Furnished living room with oak floor, oatmeal sofa and brass pendants"
     >
       <Copy
-        eyebrow="Interior design"
         title={
           <>
             Transforming Empty Rooms into <em>Meaningful Experiences.</em>
           </>
         }
-        lede="Light, material and furniture planned together, from the first layout to the last styled shelf."
         primary={{ href: "/projects?category=interior", label: "Explore Interior Projects" }}
         secondary={{ href: "/contact", label: "Start a project" }}
       />
@@ -112,13 +100,11 @@ export function HeroConstruction() {
       fallbackAlt="Finished limestone-coloured house with a stepped entrance path"
     >
       <Copy
-        eyebrow="Construction"
         title={
           <>
             From Vision to <em>Built Reality.</em>
           </>
         }
-        lede="Staged, coordinated delivery with visible progress at every step, from site to handover."
         primary={{ href: "/projects?category=construction", label: "Explore Construction Projects" }}
         secondary={{ href: "/contact", label: "Start a project" }}
       />

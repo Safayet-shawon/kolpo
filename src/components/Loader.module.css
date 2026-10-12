@@ -31,8 +31,6 @@
 
 .sub {
   font-size: var(--step--1);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
   color: var(--concrete-d);
   opacity: 0;
   animation: fade-up 0.8s var(--ease-out) 0.7s forwards;

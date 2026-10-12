@@ -6,6 +6,7 @@ A cinematic, photography-led marketing site for KOLPO. Next.js 16 (App Router) Â
 > - **Logo:** the original KOLPO logo (`public/brand/kolpo-logo-original.png`) is used everywhere. `npm run brand` only re-tints its alpha channel (ink / ivory) and crops the triangle-and-arc mark for small sizes and the favicon; the artwork is never redrawn.
 > - **Verified facts** (head office and second address, two phone numbers, email, services, the ten completed project names) come from the studio's current site, https://kolpodhaka.com, checked on 2026-10-13. Opening hours, team and social links are not published there, so none are shown.
 > - **Concept projects:** the eight entries in `src/data/projects.ts` are **demonstration concepts** (`demo: true`) with AI-generated imagery (Runway Gen-4). They are labelled in the UI and are not completed KOLPO commissions. The real completed projects are listed on `/projects` and link to their pages on kolpodhaka.com.
+> - **Licenses:** the home page has an "Our licenses" section driven by `licenses` in `src/data/site.ts`. It is empty until real licence/registration details are added; nothing is invented.
 > - **Heroes are procedural 3D** (Three.js + GSAP), not photographs and not video. They are architectural-model abstractions, not approved plans, and say so on screen.
 
 ## Routes
@@ -16,7 +17,7 @@ All four play automatically on entry, are **time-based (never scroll-driven)**, 
 
 | Hero | Stages (HUD labels) |
 |---|---|
-| Home | Empty canvas, masterplan emerges (grid, boundary, roads, plots, footprints, massing, landscape), one house separates into its layers and reassembles, KOLPO |
+| Home | One slow film (about 46 s): a building is designed on an empty site (survey, two-flat floor plan, wireframe proposal), the same building is constructed (excavation, foundations, frame, brickwork, windows, finishing, landscaping), then a first-floor flat is opened up and furnished with its lights switched on |
 | Architecture | Empty site, boundary and survey grid, roads and circulation, residential plot layout, building footprints, 3D massing (wireframe rises then solidifies), landscape and community, finished masterplan |
 | Interior | Exploded empty shell closes up, floor and wall finishes, ceiling design and lighting, built-in joinery, furniture assembles, lighting comes on, materials and details, finished interior |
 | Construction | Surveyed empty site, footprint and wireframe proposal, excavation, foundations, columns/beams/slabs per storey, instanced brickwork (about 5k bricks), windows and doors, finishing (scaffolding and crane removed), landscaping and front three-quarter reveal |

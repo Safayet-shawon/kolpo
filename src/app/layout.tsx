@@ -1,20 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Hanken_Grotesk, Instrument_Serif } from "next/font/google";
+import { Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
 import { offices, site } from "@/data/site";
 
-const display = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-instrument",
-  display: "swap",
-});
 const sans = Hanken_Grotesk({
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   variable: "--font-hanken",
   display: "swap",
 });
@@ -38,7 +32,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f4f0e8",
+  themeColor: "#fafaf8",
   width: "device-width",
   initialScale: 1,
 };
@@ -60,7 +54,7 @@ const orgJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable}`} suppressHydrationWarning>
+    <html lang="en" className={sans.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />

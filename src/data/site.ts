@@ -19,7 +19,7 @@ export const site = {
   existingSite: "https://kolpodhaka.com",
   tagline: "Thoughtful Architecture and Craftsmanship",
   description:
-    "KOLPO is a Dhaka design and build practice: architects and engineers delivering architecture, interior design, turn-key construction and project supervision, from first sketch to finished building.",
+    "Architecture, interior design and construction in Dhaka.",
   contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "kolpo.dhaka@gmail.com",
   phones: ["01741119969", "01701777913"],
   phone: process.env.NEXT_PUBLIC_CONTACT_PHONE ?? "01741119969",
@@ -64,9 +64,14 @@ export const realProjects = [
 ] as const;
 
 export const nav = [
+  { href: "/", label: "Home" },
   { href: "/architecture", label: "Architecture" },
-  { href: "/interior-design", label: "Interior Design" },
+  { href: "/interior-design", label: "Interior" },
   { href: "/construction", label: "Construction" },
   { href: "/projects", label: "Our Work" },
   { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ] as const;
+
+// Add the studio's real licences / registrations here (name + optional number). Nothing is shown as a licence until listed.
+export const licenses: { name: string; detail?: string }[] = [];

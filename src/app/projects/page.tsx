@@ -16,25 +16,16 @@ export default function ProjectsPage() {
       <PageHeader
         eyebrow="Our work"
         title="Projects"
-        lede="Completed work from the studio, followed by concept projects that show how we approach each discipline."
       />
       <section className="section" aria-labelledby="done-title">
         <div className="wrap">
-          <SectionHead
-            eyebrow="Completed work"
-            title={<span id="done-title">Built and delivered</span>}
-            lede="Projects KOLPO has completed across offices, restaurants, residences and community buildings. Full case studies and photography are on the studio's current website."
-          />
+          <SectionHead title={<span id="done-title">Completed projects</span>} />
           <RealProjects />
         </div>
       </section>
       <section className="section section--stone" aria-label="Concept projects">
         <div className="wrap">
-          <SectionHead
-            eyebrow="Concept projects"
-            title="How we think"
-            lede="These eight projects are concept visualisations created to demonstrate our approach. They are not completed commissions and are labelled as such."
-          />
+          <SectionHead title="Concept projects" lede="Concept visualisations, not completed commissions." />
           <Suspense fallback={<p className="muted">Loading projects…</p>}>
             <ProjectsExplorer />
           </Suspense>

@@ -1,3 +1,4 @@
+/* One layout at every size: model fills the stage, copy sits bottom-left over a soft paper veil. */
 .hero {
   position: relative;
   isolation: isolate;
@@ -7,14 +8,7 @@
   background: var(--paper);
   color: var(--charcoal);
   overflow: clip;
-  /* tokens consumed by HeroCopy.module.css */
   --hero-fg: var(--charcoal);
-  --hero-fg-soft: rgba(36, 34, 31, 0.84);
-  --hero-em: var(--accent);
-  --hero-accent: var(--accent);
-  --hero-line: rgba(36, 34, 31, 0.35);
-  --hero-shadow: none;
-  --hero-shadow-soft: none;
 }
 .canvas {
   position: absolute;
@@ -30,25 +24,17 @@
   inset: 0;
   z-index: 0;
 }
-.fallback::after {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 160px;
-  background: linear-gradient(to bottom, rgba(244, 240, 232, 0.92), rgba(244, 240, 232, 0));
-}
 .fallback img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-/* Ivory veil keeps the headline legible over whatever the model is doing behind it. */
 .veil {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(to top, rgba(244, 240, 232, 0.94) 0%, rgba(244, 240, 232, 0.78) 34%, rgba(244, 240, 232, 0) 62%);
+  background: linear-gradient(to top, rgba(250, 250, 248, 0.96) 0%, rgba(250, 250, 248, 0.82) 22%, rgba(250, 250, 248, 0) 48%);
 }
 .content {
   position: relative;
@@ -57,17 +43,7 @@
   width: 100%;
   max-width: var(--max);
   margin-inline: auto;
-  padding: calc(var(--header-h) + 3rem) var(--gutter) clamp(5.5rem, 4rem + 4vw, 7.5rem);
-}
-@media (min-width: 900px) {
-  .veil {
-    background: linear-gradient(to right, rgba(244, 240, 232, 0.96) 0%, rgba(244, 240, 232, 0.86) 30%, rgba(244, 240, 232, 0) 56%),
-      linear-gradient(to top, rgba(244, 240, 232, 0.6), rgba(244, 240, 232, 0) 26%);
-  }
-  .content {
-    align-self: center;
-    padding-bottom: 6.5rem;
-  }
+  padding: calc(var(--header-h) + 2rem) var(--gutter) 4.5rem;
 }
 
 /* ── HUD ── */
@@ -80,65 +56,56 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0 var(--gutter) 1rem;
+  gap: 0.8rem;
+  padding: 0 var(--gutter) 0.8rem;
   max-width: var(--max);
   margin-inline: auto;
-  font-size: var(--step--1);
 }
 .meta {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 0.35rem 1.1rem;
+  gap: 0.8rem;
   min-width: 0;
 }
 .ticks {
   display: inline-flex;
-  gap: 4px;
+  gap: 3px;
+  flex-shrink: 0;
 }
 .ticks i {
-  width: 18px;
+  width: 10px;
   height: 2px;
-  background: rgba(36, 34, 31, 0.22);
+  background: rgba(17, 17, 17, 0.18);
   transition: background 0.4s;
 }
 .ticks i[data-on="true"] {
   background: var(--charcoal);
 }
 .label {
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 600;
-  font-size: 0.72rem;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--concrete-d);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .disclosure {
   display: none;
-  color: var(--concrete-d);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-}
-@media (min-width: 1100px) {
-  .disclosure {
-    display: inline;
-  }
 }
 .controls {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.3rem;
   flex-shrink: 0;
 }
 .controls button {
-  min-height: 44px;
+  min-height: 36px;
   min-width: 44px;
-  padding: 0.4rem 0.95rem;
-  background: rgba(244, 240, 232, 0.85);
-  border: 1px solid var(--charcoal);
+  padding: 0.3rem 0.8rem;
+  background: transparent;
+  border: 1px solid var(--line-strong);
   color: var(--charcoal);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 600;
+  font-size: 0.74rem;
+  font-weight: 500;
   cursor: pointer;
   transition:
     background 0.2s,
