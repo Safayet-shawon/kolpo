@@ -18,12 +18,8 @@
   border-bottom-color: var(--line);
 }
 
-/* Over the cinematic hero: light text with a soft top scrim, flipped to ink while a pale scene is showing. */
+/* Over the (ivory) 3D hero the header is transparent with ink text. */
 .overHero {
-  color: var(--on-dark);
-  background: linear-gradient(to bottom, rgba(20, 18, 16, 0.5), rgba(20, 18, 16, 0));
-}
-:global(html[data-hero-tone="light"]) .overHero {
   color: var(--charcoal);
   background: none;
 }
@@ -45,8 +41,7 @@
   min-height: 44px;
 }
 .logo {
-  width: 108px;
-  height: auto;
+  display: block;
 }
 
 .desktop {

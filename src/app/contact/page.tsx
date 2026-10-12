@@ -32,14 +32,16 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                 <p>
                   Email <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>
                 </p>
-              ) : (
-                <p className="muted">A public email address will be published here once confirmed. Until then, the form is the best way to reach us.</p>
-              )}
-              {site.phone ? (
-                <p>
-                  Call <a href={`tel:${site.phone.replace(/\s/g, "")}`}>{site.phone}</a>
-                </p>
               ) : null}
+              <p>
+                Call{" "}
+                {site.phones.map((p, i) => (
+                  <span key={p}>
+                    {i > 0 ? " · " : ""}
+                    <a href={`tel:${p}`}>{p}</a>
+                  </span>
+                ))}
+              </p>
               <OfficeSection />
             </aside>
           </div>

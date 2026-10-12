@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Wordmark from "./Wordmark";
+import Logo from "./Logo";
 import styles from "./Loader.module.css";
 
 const MIN_MS = 900; // enough for the wordmark to draw once; not an artificial delay beyond that
@@ -64,7 +64,7 @@ export default function Loader() {
   return (
     <div className={`${styles.loader} ${leaving ? styles.leaving : ""}`} role="status" aria-live="polite" id="kolpo-loader">
       <div className={styles.inner}>
-        <Wordmark className={styles.mark} draw />
+        <Logo height={150} className={styles.mark} priority />
         <span className={styles.sub}>Architecture · Interiors · Construction</span>
       </div>
       <span className="sr-only">Loading KOLPO</span>

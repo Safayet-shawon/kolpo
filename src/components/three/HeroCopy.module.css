@@ -37,10 +37,7 @@
   margin-top: 0.4rem;
 }
 .actions :global(.btn--ghost) {
-  background: rgba(20, 18, 16, 0.4);
-}
-.actions :global(.btn--ghost):hover {
-  background: var(--paper);
+  background: transparent;
 }
 
 /* Home: three disciplines as numbered entry points */

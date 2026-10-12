@@ -12,30 +12,56 @@ export type Office = {
   verified: boolean;
 };
 
+// Verified against the studio's current website (https://kolpodhaka.com) on 2026-10-13.
 export const site = {
   name: "KOLPO",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://kolpo.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://kolpo-tau.vercel.app",
+  existingSite: "https://kolpodhaka.com",
+  tagline: "Thoughtful Architecture and Craftsmanship",
   description:
-    "KOLPO is a design and build practice connecting architecture and community planning, interior design, and construction in one continuous process.",
-  // Set NEXT_PUBLIC_CONTACT_EMAIL once the studio confirms its public address.
-  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? null,
-  phone: process.env.NEXT_PUBLIC_CONTACT_PHONE ?? null,
+    "KOLPO is a Dhaka design and build practice: architects and engineers delivering architecture, interior design, turn-key construction and project supervision, from first sketch to finished building.",
+  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "kolpo.dhaka@gmail.com",
+  phones: ["01741119969", "01701777913"],
+  phone: process.env.NEXT_PUBLIC_CONTACT_PHONE ?? "01741119969",
   social: [] as { label: string; href: string }[],
 };
 
-// No office has been verified yet. Replace this placeholder with real, confirmed details.
 export const offices: Office[] = [
   {
-    id: "studio",
-    name: "KOLPO Studio",
-    address: null,
-    phone: site.phone,
+    id: "head-office",
+    name: "Head office",
+    address: "477, Road-32, Mohakhali DOHS, Dhaka-1206",
+    phone: site.phones.join(" / "),
     email: site.contactEmail,
+    hours: null, // not published; do not guess
+    mapUrl: "https://www.openstreetmap.org/search?query=477%20Road%2032%20Mohakhali%20DOHS%20Dhaka",
+    verified: true,
+  },
+  {
+    id: "second-address",
+    name: "Second address",
+    address: "273/3, West Manikdi, ECB Chattor to Mirpur DOHS Link Road, Dhaka-1206",
+    phone: null,
+    email: null,
     hours: null,
-    mapUrl: null,
-    verified: false,
+    mapUrl: "https://www.openstreetmap.org/search?query=West%20Manikdi%20ECB%20Chattor%20Dhaka",
+    verified: true,
   },
 ];
+
+// Completed projects listed on the studio's own site. Full details and photography live there.
+export const realProjects = [
+  { title: "Fedrigoni", slug: "fedrigoni" },
+  { title: "Sipn' Dip", slug: "sipn-dip" },
+  { title: "Dearly", slug: "dearly" },
+  { title: "Selina & Nixon's Apartment", slug: "selina-and-nixons-apartment" },
+  { title: "Banasree Apartment", slug: "banasree-apartment" },
+  { title: "Kanon Rahman's Apartment (KOLI)", slug: "kanon-rahmans-apartment-koli" },
+  { title: "Col. Azim Apartment Building", slug: "col-azim-apartment-building" },
+  { title: "BURO Bangladesh, Kaliakoir Branch Office", slug: "buro-bangladesh-kaliakoir-branch-office" },
+  { title: "BURO Bangladesh, Rajshahi Training Center", slug: "buro-bangladesh-rajshahi-training-center" },
+  { title: "Tanveer Residence", slug: "tanveer-residence" },
+] as const;
 
 export const nav = [
   { href: "/architecture", label: "Architecture" },

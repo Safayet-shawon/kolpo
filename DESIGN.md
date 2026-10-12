@@ -21,6 +21,9 @@ Research informing this (patterns only, no copying): BIG (project-first, image-l
 
 No neon, no gradients as decoration. The only gradients are legibility scrims over photography.
 
+## Logo
+The original KOLPO logo (triangle-and-arc mark plus "Kolpo | কল্প") is used unmodified in colour variants (ink on light, ivory on dark). The nav uses the mark alone at 46px (the wordmark is illegible that small); footer and loader use the full logo. Never redraw, stretch, recolour outside the palette or add effects.
+
 ## Typography
 - Display: **Instrument Serif** (regular + italic), tight tracking, `text-wrap: balance`. Italic is used for one emphasised phrase per headline.
 - Text: **Hanken Grotesk** — highly legible, used for body, UI and uppercase letter-spaced labels.
@@ -29,8 +32,11 @@ No neon, no gradients as decoration. The only gradients are legibility scrims ov
 ## Layout & spacing
 12-column grid (`.grid-12`), `--max: 1560px`, fluid `--gutter`. Compositions are deliberately asymmetric: services use three different layouts (wide image + side text / text + tall crop / full-bleed overlay); the project grid alternates 7/5 column spans with vertical offsets. Hairline rules (`--line`) instead of boxed cards. Sections alternate paper / stone / charcoal.
 
+## 3D hero treatment
+Procedural Three.js architectural-model scenes on warm ivory: white/ivory massing, limestone, charcoal CAD linework (1px line segments drawn in with `drawRange`), sage landscape, brass accents (survey stakes, crane, pendants, entrance canopy). One shadow-casting sun plus a hemisphere light, neutral tone mapping, no decorative particles. An ivory veil sits behind the headline for legibility. The model sits right of the headline on desktop and above it on mobile (camera view offset).
+
 ## Image & video treatment
-Photography is photoreal only (AI-generated concept visualisation, labelled; see README for provenance). No illustrations, cartoons, icons-as-art. The only drawn graphics are functional architectural linework (site-plan drafting animation, footprint overlay), always labelled *illustrative*.
+Photography is photoreal only (AI-generated concept visualisation, labelled; see README for provenance). No illustrations, cartoons, icons-as-art. The 3D heroes are the primary visual; photography appears only in supporting sections and as the no-WebGL fallback.
 Delivery: AVIF + WebP at 640/1280/1920 via `<picture>`, intrinsic `width`/`height`, blur placeholder, LCP image `fetchpriority=high`.
 
 ## Motion principles
@@ -52,7 +58,7 @@ Breakpoints at 640 / 760 / 900 / 1040 / 1000. Verified at 375px and desktop. Mob
 Semantic landmarks, skip link, one `h1` per page, visible 2px focus ring, 44px targets, labelled form fields with `aria-invalid`/`aria-describedby`, live regions for filters and status, meaningful `alt`, decorative scene frames `aria-hidden` with a text description on the hero `section`, pause/skip/replay controls for moving content, `prefers-reduced-motion` honoured everywhere.
 
 ## Performance constraints
-No video: heroes are image sequences loaded just-in-time (current + next frame only). Hero route JS is one client component. No animation library (CSS + WAAPI-free timers). Immutable caching for `/media/*`. Fonts via `next/font` (self-hosted, `display: swap`).
+Heroes are procedural 3D (no video, no image sequence): Three.js and GSAP are dynamically imported after first paint; rendering happens only while animating or when the pointer moves after completion; DPR capped (2 desktop / 1.5 mobile); shadow maps 2048/1024. Immutable caching for `/media/*`. Fonts via `next/font` (self-hosted, `display: swap`).
 
 ## Components & interaction rules
 `Cinematic` (sequencer) · `PlanDrawing` · `Overlays` · `Photo` · `ProjectCard` · `ProjectsExplorer` (filters sync to `?category=`) · `NearestProjects` (geolocation only on button press; distances via haversine; text-only matches labelled *area-based*) · `ContactForm` (client + server validation) · `BeforeAfter` (keyboard-operable slider).

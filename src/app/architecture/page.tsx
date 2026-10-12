@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HeroArchitecture } from "@/components/hero/Heroes";
+import { HeroArchitecture } from "@/components/three/Heroes";
 import ServiceBody from "@/components/ServicePage";
 
 export const metadata: Metadata = {

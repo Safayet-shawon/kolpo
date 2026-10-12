@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Photo from "@/components/Photo";
 import Reveal from "@/components/Reveal";
-import { offices, site } from "@/data/site";
+import { offices, realProjects, site } from "@/data/site";
 import { services } from "@/data/services";
 import type { Category } from "@/data/projects";
 import styles from "./Sections.module.css";
@@ -155,5 +155,23 @@ export function OfficeSection() {
         ))
       )}
     </div>
+  );
+}
+
+/** The studio's real, completed projects. Details and photography live on the studio's existing website. */
+export function RealProjects() {
+  return (
+    <ul className={styles.real}>
+      {realProjects.map((p, i) => (
+        <Reveal as="li" key={p.slug} delay={(i % 5) * 50}>
+          <a href={`${site.existingSite}/${p.slug}`} target="_blank" rel="noopener noreferrer">
+            <span className={`num ${styles.realN}`}>{String(i + 1).padStart(2, "0")}</span>
+            <span className={styles.realT}>{p.title}</span>
+            <span className="arr" aria-hidden="true">↗</span>
+            <span className="sr-only"> (opens kolpodhaka.com)</span>
+          </a>
+        </Reveal>
+      ))}
+    </ul>
   );
 }

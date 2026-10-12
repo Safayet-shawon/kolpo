@@ -4,7 +4,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
-import { site } from "@/data/site";
+import { offices, site } from "@/data/site";
 
 const display = Instrument_Serif({
   subsets: ["latin"],
@@ -53,6 +53,9 @@ const orgJsonLd = {
   url: site.url,
   description: site.description,
   ...(site.contactEmail ? { email: site.contactEmail } : {}),
+  telephone: site.phones[0],
+  address: { "@type": "PostalAddress", streetAddress: offices[0].address, addressLocality: "Dhaka", postalCode: "1206", addressCountry: "BD" },
+  sameAs: [site.existingSite],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

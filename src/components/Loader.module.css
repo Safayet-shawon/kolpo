@@ -24,8 +24,9 @@
 }
 
 .mark {
-  width: min(62vw, 340px);
-  height: auto;
+  /* The original logo is revealed with a drafting-style wipe rather than redrawn. */
+  clip-path: inset(0 0 100% 0);
+  animation: reveal 1s var(--ease-in-out) 0.1s forwards;
 }
 
 .sub {
@@ -37,17 +38,9 @@
   animation: fade-up 0.8s var(--ease-out) 0.7s forwards;
 }
 
-/* Wordmark stroke drawing (paths are normalised with pathLength=1) */
-:global(.wm-draw) {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: wm 0.9s var(--ease-in-out) forwards;
-  animation-delay: calc(var(--i) * 90ms);
-}
-
-@keyframes wm {
+@keyframes reveal {
   to {
-    stroke-dashoffset: 0;
+    clip-path: inset(0 0 0 0);
   }
 }
 @keyframes fade-up {
@@ -74,8 +67,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :global(.wm-draw) {
-    stroke-dashoffset: 0;
+  .mark {
+    clip-path: none;
     animation: none;
   }
   .sub {

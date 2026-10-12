@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { HeroHome } from "@/components/hero/Heroes";
+import { HeroHome } from "@/components/three/Heroes";
 import Photo from "@/components/Photo";
 import Reveal from "@/components/Reveal";
 import { CtaBand, OfficeSection, ProcessList, SectionHead } from "@/components/Sections";
@@ -53,7 +53,7 @@ export default function HomePage() {
       </section>
 
       {/* Services: three distinct compositions */}
-      <section className={`section--tight ${styles.services}`} aria-labelledby="services-title">
+      <section className={`section--tight ${styles.services}`} id="services" aria-labelledby="services-title">
         <div className="wrap">
           <SectionHead eyebrow="What we do" title={<span id="services-title">Three disciplines, one result.</span>} />
         </div>

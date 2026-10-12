@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Wordmark from "./Wordmark";
+import Logo from "./Logo";
 import { nav } from "@/data/site";
 import styles from "./Nav.module.css";
 
@@ -65,7 +65,7 @@ export default function Nav() {
     <header className={`${styles.header} ${overHero ? styles.overHero : styles.solid} ${open ? styles.menuOpen : ""}`}>
       <div className={styles.bar}>
         <Link href="/" className={styles.brand} aria-label="KOLPO — home">
-          <Wordmark className={styles.logo} />
+          <Logo variant="mark" height={46} className={styles.logo} priority />
         </Link>
 
         <nav className={styles.desktop} aria-label="Primary">

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Wordmark from "./Wordmark";
+import Logo from "./Logo";
 import { nav, offices, site } from "@/data/site";
 import styles from "./Footer.module.css";
 
@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="wrap">
         <div className={styles.top}>
           <div className={styles.brand}>
-            <Wordmark className={styles.logo} />
+            <Logo tone="light" height={110} className={styles.logo} />
             <p>{site.description}</p>
           </div>
 
@@ -40,7 +40,9 @@ export default function Footer() {
               {site.contactEmail ? (
                 <li><a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></li>
               ) : null}
-              {site.phone ? <li><a href={`tel:${site.phone.replace(/\s/g, "")}`}>{site.phone}</a></li> : null}
+              {site.phones.map((p) => (
+                <li key={p}><a href={`tel:${p}`}>{p}</a></li>
+              ))}
               {office.verified && office.address ? <li>{office.address}</li> : null}
               {!site.contactEmail && !site.phone ? (
                 <li>

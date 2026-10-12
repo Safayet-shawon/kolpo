@@ -95,6 +95,8 @@ export const services: Record<Category, Service> = {
       { title: "Quality assurance", body: "Checks at each stage, from reinforcement to final finishes." },
       { title: "Safety", body: "Site planning, hoarding, method statements and briefings for every crew." },
       { title: "Materials & workmanship", body: "Materials specified for durability, and workmanship checked against the drawings." },
+      { title: "Project supervision", body: "On-site supervision so the building is delivered as designed." },
+      { title: "Turn-key construction & renovation", body: "Full delivery of new builds and renovations under one team." },
       { title: "Progress documentation", body: "Regular photographic records so every stage is visible to you." },
     ],
     process: [

@@ -166,3 +166,39 @@
 .office dd {
   margin: 0;
 }
+
+/* Real projects list */
+.real {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 1px solid var(--line-strong);
+}
+.real a {
+  display: grid;
+  grid-template-columns: 2.6rem 1fr auto;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 60px;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  transition: padding 0.3s var(--ease-out), color 0.2s;
+}
+.real a:hover {
+  padding-left: 0.6rem;
+  color: var(--accent);
+}
+.realN {
+  color: var(--accent);
+}
+.realT {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  line-height: 1.15;
+}
+@media (min-width: 900px) {
+  .real {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 4rem;
+  }
+}
